@@ -1,6 +1,4 @@
 
-
-
 var map = L.map('map').fitWorld();
         
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -31,12 +29,3 @@ map.on('locationerror', onLocationError);
 map.locate({setView: true, maxZoom: 16});
 
 
-countryListAllIsoData.forEach(country => {
-    let code3 = country["code3"].toLowerCase();
-    let code2 = country["code"].toLowerCase();
-    let name = country["name"];
-    let template = `<option value="${code3}">${name}</option>`;
-    $("#countries").append(template);
-  });
-
-      
