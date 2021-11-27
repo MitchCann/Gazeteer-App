@@ -44,3 +44,22 @@ animation: shake 1.5s infinite;
 90% { transform: translate(1px, -3px) rotate(0deg);}
 100% { transform: translate(1px, -1px) rotate(-1deg);}
 }
+
+.select-container {
+    position:absolute;
+    top:10px;
+    left:50%;
+    transform:translate(-50%,0);
+    width:200px;
+    z-index:999
+}
+
+.container-fluid {
+    display:flex
+}
+
+@media only screen and (max-width:500px) {
+    #countries {
+        width:150px
+    }
+}
