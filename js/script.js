@@ -1,7 +1,6 @@
 $(document).ready(function(){
 
-    $('#select-country').select2();
- 
+   
 
     $(".preloader").hide();
 
@@ -68,14 +67,6 @@ map.on('locationerror', onLocationError);
 
 map.locate({setView: true, maxZoom: 16});
 
-
-
-        
-        
-    /*$("[name='select-country']").select2({
-            placeholder: "Select a country",
-            
-        });*/
     
     //Populate Select Element
         $.ajax({
