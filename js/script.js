@@ -1,14 +1,13 @@
 $(document).ready(function(){
-
-   
-
+    
+    //Preloader
     $(".preloader").hide();
 
+    //Map
     var map = L.map('map').fitWorld();
 
-        
-
-L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+    //Tile Layer
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 
                 maxZoom: 18,
 
@@ -24,29 +23,32 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 
             }).addTo(map);
 
-        
-
-function onLocationFound(e) {
-
-                var radius = e.accuracy / 2;
+    //Location Found
+    function onLocationFound(e) {
 
         
 
-                L.marker(e.latlng).addTo(map)
+                //var radius = e.accuracy / 2;
+
+        
+
+                /* L.marker(e.latlng).addTo(map)
 
                     .bindPopup("You are within " + radius + " meters from this point").openPopup();
 
         
 
-                L.circle(e.latlng, radius).addTo(map);
+                L.circle(e.latlng, radius).addTo(map); 
 
-                const latLngs = L.GeoJSON.coordsToLatLngs(data[0].geojson.coordinates,2); 
+                 const latLngs = L.GeoJSON.coordsToLatLngs(data[0].geojson.coordinates,2); 
                     L.polyline(latLngs, {
-                            color: "green",
+                            color: "red",
                             weight: 14,
                             opacity: 1
-                    }).addTo(map);
+                    }).addTo(map);  */
 
+
+                    
             }
 
         
@@ -65,12 +67,12 @@ map.on('locationerror', onLocationError);
 
         
 
-map.locate({setView: true, maxZoom: 16});
+//map.locate({setView: true, maxZoom: 16});
 
     
     //Populate Select Element
         $.ajax({
-            url: "geoJson.php",
+            url:"js/geoJson.php",
             type: 'POST',
             dataType: "json",
             
@@ -86,11 +88,34 @@ map.locate({setView: true, maxZoom: 16});
                 }
             });
     
+            
+        //Get Border
+            var border ;
+
+            $('#select-country').change(function() {
+                 let name = $('#select-country').val();
+                $.ajax({
+                    url: "js/geoJson.php",
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function(result) {
+                        const filterData = result.data.border.features.filter((a) => (a.properties.iso_a3 === name));
+                        border = L.geoJSON(filterData[0]); 
+                        map.fitBounds(border.getBounds());
+                    }
+                })
+            });
+            
     
     
+
+
+
+
+
+
+
     });
-
-
 
 
 
