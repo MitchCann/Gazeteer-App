@@ -81,7 +81,7 @@ map.on('locationerror', onLocationError);
                 
                 for (var i=0; i<result.data.border.features.length; i++) {
                     $('#select-country').append($('<option>', {
-                        value: result.data.border.features[i].properties.iso_a3,
+                        value: result.data.border.features[i].properties.iso_a2,
                         text: result.data.border.features[i].properties.name,
                     }));
                    }
@@ -98,15 +98,24 @@ map.on('locationerror', onLocationError);
                     url: "js/geoJson.php",
                     type: 'POST',
                     dataType: 'json',
+                    data: {
+                        iso_a2: $('#select-country').val(),
+                    },
                     success: function(result) {
-                        const filterData = result.data.border.features.filter((a) => (a.properties.iso_a3 === name));
+                        const filterData = result.data.border.features.filter((a) => (a.properties.iso_a2 === name));
                         border = L.geoJSON(filterData[0]); 
                         map.fitBounds(border.getBounds());
+                        
+                    } ,error: function(jqXHR){
+
+                        console.log(jqXHR);
+
                     }
                 })
             });
             
-    
+          
+
     
 
 
