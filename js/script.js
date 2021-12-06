@@ -71,22 +71,24 @@ map.on('locationerror', onLocationError);
 
     
     //Populate Select Element
-        $.ajax({
-            url:"js/geoJson.php",
-            type: 'POST',
-            dataType: "json",
+    $.ajax({
+        url:"js/geoJson.php",
+        type: 'POST',
+        dataType: "json",
+        
+        success: function(result) {
+            console.log(result);
             
-            success: function(result) {
-                console.log(result);
-                
-                for (var i=0; i<result.data.border.features.length; i++) {
-                    $('#select-country').append($('<option>', {
-                        value: result.data.border.features[i].properties.iso_a2,
-                        text: result.data.border.features[i].properties.name,
-                    }));
-                   }
-                }
-            });
+            for (var i=0; i<result.data.country.length; i++) {
+                $('#select-country').append($('<option>', {
+                    value: result.data[i].iso_a2,
+                    text: result.data[i].name
+                }));
+               }
+            }
+        });
+
+ 
     
             
         //Get Border
@@ -106,7 +108,7 @@ map.on('locationerror', onLocationError);
                         
                     } ,error: function(jqXHR){
 
-                        console.log(jqXHR);git
+                        console.log(jqXHR);
 
                     }
                 })
