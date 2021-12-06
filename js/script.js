@@ -102,13 +102,11 @@ map.on('locationerror', onLocationError);
                         iso_a2: $('#select-country').val(),
                     },
                     success: function(result) {
-                        const filterData = result.data.border.features.filter((a) => (a.properties.iso_a2 === name));
-                        border = L.geoJSON(filterData[0]); 
-                        map.fitBounds(border.getBounds());
+                        console.log('success')
                         
                     } ,error: function(jqXHR){
 
-                        console.log(jqXHR);
+                        console.log(jqXHR);git
 
                     }
                 })
