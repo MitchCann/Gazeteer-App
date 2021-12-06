@@ -1,7 +1,5 @@
 <?php
 
- 
-
     // remove for production
 
     ini_set('display_errors', 'On');
@@ -36,6 +34,8 @@
     $output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
 
     $output['data'] = $countries;
+
+    
 
     
 

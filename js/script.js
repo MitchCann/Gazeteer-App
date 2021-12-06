@@ -24,15 +24,15 @@ $(document).ready(function(){
             }).addTo(map);
 
     //Location Found
-    function onLocationFound(e) {
+     function onLocationFound(e) {
 
         
 
-                //var radius = e.accuracy / 2;
+                var radius = e.accuracy / 2;
 
         
 
-                /* L.marker(e.latlng).addTo(map)
+                 L.marker(e.latlng).addTo(map)
 
                     .bindPopup("You are within " + radius + " meters from this point").openPopup();
 
@@ -45,11 +45,11 @@ $(document).ready(function(){
                             color: "red",
                             weight: 14,
                             opacity: 1
-                    }).addTo(map);  */
+                    }).addTo(map);  
 
 
                     
-            }
+            } 
 
         
 
@@ -57,7 +57,7 @@ function onLocationError(e) {
 
                 alert(e.message);
 
-            }
+            } 
 
         
 
@@ -65,7 +65,7 @@ map.on('locationfound', onLocationFound);
 
 map.on('locationerror', onLocationError);
 
-        
+     
 
 //map.locate({setView: true, maxZoom: 16});
 
@@ -79,7 +79,7 @@ map.on('locationerror', onLocationError);
         success: function(result) {
             console.log(result);
             
-            for (var i=0; i<result.data.country.length; i++) {
+            for (var i=0; i<result.data.length; i++) {
                 $('#select-country').append($('<option>', {
                     value: result.data[i].iso_a2,
                     text: result.data[i].name
@@ -105,6 +105,11 @@ map.on('locationerror', onLocationError);
                     },
                     success: function(result) {
                         console.log('success')
+
+                        const filterData = result.data.filter((a) => (a.properties.iso_a2 === name));
+                        border = L.geoJSON(filterData[0]); 
+                        map.fitBounds(border.getBounds());
+                
                         
                     } ,error: function(jqXHR){
 
