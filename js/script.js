@@ -4,24 +4,21 @@ $(document).ready(function(){
     $(".preloader").hide();
 
     //Map
-    var map = L.map('map').fitWorld();
+
+    var map = L.map('map').setView([51.505, -0.09], 13);
 
     //Tile Layer
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 
-                maxZoom: 18,
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
-                attribution: 'Map data &copy; <a href=https://www.openstreetmap.org/copyright>OpenStreetMap</a> contributors, ' +
+        maxZoom: 19,
 
-                    'Imagery © <a href=https://www.mapbox.com/>Mapbox</a>',
+        attribution: '&copy; <a href=https://www.openstreetmap.org/copyright>OpenStreetMap</a> contributors'
 
-                id: 'mapbox/streets-v11',
+    }).addTo(map);
 
-                tileSize: 512,
 
-                zoomOffset: -1
-
-            }).addTo(map);
+    
 
     //Location Found
      function onLocationFound(e) {
@@ -106,8 +103,8 @@ map.on('locationerror', onLocationError);
                     success: function(result) {
                         console.log(result)
 
-                        const filterData = result.data.border.features.filter((a) => (a.iso_a2 === name));
-                        border = L.geoJSON(filterData[0]); 
+                        border = L.geoJSON(result.data.border.features[1].geometry); 
+                        border.addTo(map);
                         map.fitBounds(border.getBounds());
                 
                         

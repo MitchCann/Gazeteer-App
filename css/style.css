@@ -6,9 +6,44 @@ html, body {
     
 }
 
- #map {
-      height: 100%; width: 100vw; 
-    }
+#map {
+
+    height: 100vh; width: 100%; 
+
+  }
+
+
+  dropdown-container{
+
+    width: 33%;
+
+    margin: auto;
+
+    position: fixed;
+
+    top: 50px;
+
+    left:33vw;
+
+    z-index: 10000;
+
+}
+
+ 
+
+select{
+
+ 
+
+    width: 33%;
+
+    text-align: center;
+
+ 
+
+}
+
+
 
     .preloader
     {
