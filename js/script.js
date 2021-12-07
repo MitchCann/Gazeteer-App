@@ -104,9 +104,9 @@ map.on('locationerror', onLocationError);
                         iso_a2: $('#select-country').val(),
                     },
                     success: function(result) {
-                        console.log('success')
+                        console.log(result)
 
-                        const filterData = result.data.filter((a) => (a.properties.iso_a2 === name));
+                        const filterData = result.data.filter((a) => (a.iso_a2 === name));
                         border = L.geoJSON(filterData[0]); 
                         map.fitBounds(border.getBounds());
                 
