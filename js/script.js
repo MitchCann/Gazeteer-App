@@ -97,7 +97,7 @@ map.on('locationerror', onLocationError);
             $('#select-country').change(function() {
                  let name = $('#select-country').val();
                 $.ajax({
-                    url: "js/geoJson.php",
+                    url: "js/borders.php",
                     type: 'POST',
                     dataType: 'json',
                     data: {
@@ -106,7 +106,7 @@ map.on('locationerror', onLocationError);
                     success: function(result) {
                         console.log(result)
 
-                        const filterData = result.data.filter((a) => (a.iso_a2 === name));
+                        const filterData = result.data.border.features.filter((a) => (a.iso_a2 === name));
                         border = L.geoJSON(filterData[0]); 
                         map.fitBounds(border.getBounds());
                 
