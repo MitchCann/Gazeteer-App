@@ -1,0 +1,209 @@
+html, body, #map {
+  height:100%;
+  width:100%;
+  padding:0px;
+  margin:0px;
+}
+
+#map {
+  float: left;
+  z-index: 1;
+  position: relative;     
+}
+
+
+.preloader
+{
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100vh;
+background: #fff;
+z-index: 9999;
+text-align: center;
+}
+
+.preloader-icon
+{
+position: relative;
+top: 45%;
+width: 100px;
+border-radius: 50%;
+animation: shake 1.5s infinite;
+}
+
+@keyframes shake
+{
+0% { transform: translate(1px, -1px) rotate(0deg);}
+10% { transform: translate(1px, -3px) rotate(-1deg);}
+20% { transform: translate(1px, -5px) rotate(-3deg);}
+30% { transform: translate(1px, -7px) rotate(0deg);}
+40% { transform: translate(1px, -9px) rotate(1deg);}
+50% { transform: translate(1px, -11px) rotate(3deg);}
+60% { transform: translate(1px, -9px) rotate(0deg);}
+70% { transform: translate(1px, -7px) rotate(-1deg);}
+80% { transform: translate(1px, -5px) rotate(-3deg);}
+90% { transform: translate(1px, -3px) rotate(0deg);}
+100% { transform: translate(1px, -1px) rotate(-1deg);}
+}
+
+.overlay2 {
+  
+  height: 60px;
+  width: 100%;
+  position: absolute;
+  float: top;
+  z-index: 2;
+  
+  
+  pointer-events: auto;   
+}
+
+.leaflet-control-container { 
+  position: absolute; 
+  top: 65px;
+} 
+
+h3 {
+  padding-left: 1rem;
+}
+#selCountry{
+  border-radius: 5px;
+  text-align: center;
+  border-color: white;
+}
+#btnRun{
+  margin-left: .5rem;
+  background-color: #ffffff;
+  border: 1px solid #ffffff;
+  font-weight: bold;
+  border-radius: 5px;
+  color: blueviolet;
+}
+
+.test {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.leaflet-control-scale-line {
+  position: relative;
+  z-index: 35;
+}
+
+
+.leaflet-control-zoom {
+  position: absolute; 
+  
+}
+
+/* Modal */
+
+.modal-title {
+  margin-left: auto;
+  margin-right: auto;
+  
+}
+
+.modal-body {
+
+  overflow-y: auto;
+
+}
+
+
+/* ------------------- botones ------------------ */
+
+button {
+  padding: 0;
+  width: 32px;
+  height: 37px;
+  line-height: 0px;
+}
+
+
+
+
+  /* fichas */
+#nav-covid {
+  text-align: left;
+  padding-left: 20px;
+  padding-top: 40px;
+}
+
+#nav-currency {
+  text-align: left;
+  padding-left: 20px;
+  padding-top: 40px;
+}
+
+#nav-generalInfo {
+  text-align: left;
+  padding-left: 20px;
+  padding-top: 40px;
+}
+
+#nav-home {
+  padding-left: 20px;
+  padding-top: 20px;
+}
+
+#nav-weather{
+  padding-top: 40px;
+  /*padding-left: 20px;*/
+}
+
+#nav-wikiPlaces {
+ /* padding-left: 20px;*/
+  padding-top: 20px;
+}
+
+#nav-news {
+  padding-top: 20px;
+  padding-left: 10px;
+}
+
+#txtCovidDeaths {
+  font-weight: bold;
+  animation:blinkingTextRed 0.9s infinite;
+}
+
+#txtCovidDeathRate {
+  animation:blinkingTextRed 0.9s infinite;
+}
+
+#txtHeadlineTitle {
+  font-weight: bold;
+  color: green;
+  text-align: center;
+}
+
+
+
+.nav-link {
+  color: blueviolet;
+}
+
+
+#modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  
+  border-radius: 0.3rem;
+  outline: 0;
+}
+
+.btn-secondary {
+  color: #fff;
+  background-color: blueviolet !important;
+  border-color: white !important;
+  padding: 0% !important;
+
+}
