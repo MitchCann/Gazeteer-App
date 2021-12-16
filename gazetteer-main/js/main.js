@@ -59,6 +59,7 @@ $.ajax({
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
         }
       });
 
@@ -86,12 +87,14 @@ const successCallback = (position) => {
       },
       error: function(jqXHR, textStatus, errorThrown) {
           console.log(textStatus, errorThrown);
+          console.log(jqXHR.responseText);
       }
   }); 
 }
 
 const errorCallback = (error) => {
           console.error(error);
+          console.log(jqXHR.responseText);
 }
 navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
 
@@ -154,6 +157,7 @@ $('#selCountry').on('change', function() {
     error: function(jqXHR, textStatus, errorThrown) {
       // your error code
       console.log(textStatus, errorThrown);
+      console.log(jqXHR.responseText);
     }
   }); 
 });
@@ -208,6 +212,7 @@ map.on('click', function(e) {
     error: function(jqXHR, textStatus, errorThrown) {
         console.log(textStatus, errorThrown);
         console.log(jqXHR, errorThrown)
+        console.log(jqXHR.responseText);
        
     }
   });        
@@ -248,6 +253,7 @@ $('#btnRun').click(function() {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
             
         }  
     }); 
