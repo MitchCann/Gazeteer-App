@@ -230,38 +230,34 @@ $('#btnRun').click(function() {
         ); */
 
 
-    $.ajax({
-        url: "./php/countryCode.php",
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            lat: currentLat,
-            lng: currentLng,
-        },
-        success: function(result) {
-          
-            console.log('restCountries', result);
-                
-            if (result.status.name == "ok") {
-                iso2CountryCode = result.data;
-                //console.log(result.data);
-                console.log(jqXHR.responseText);
-                $('#country-capital').html('<td>London</td>');
-                
-            
-        
-            console.log(jqXHR.responseText);
+        $.ajax({
 
-            console.log(errorThrown);
-                    
-            }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log(textStatus, errorThrown);
-            console.log(jqXHR.responseText);
-            
-        }  
-    }); 
+            url: "./php/countryCode.php",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                lat: currentLat,
+                lng: currentLng,
+           },
+      
+            success: function(result) {
+                console.log('restCountries', result);
+      
+                if (result.status.name == "ok") {
+                     iso2CountryCode = result.data;
+                    //console.log(result.data);
+                     console.log(jqXHR.responseText);
+                    $('#country-capital').html('<td>London</td>');
+                }
+      
+            },
+      
+            error: function(jqXHR, textStatus, errorThrown) {
+              console.log(jqXHR.responseText);
+              console.log(errorThrown);
+            }  
+      
+        }); 
   });
 
 
