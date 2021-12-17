@@ -5,7 +5,7 @@
 	$executionStartTime = microtime(true);
 
 	
-	$url='api.geonames.org/countryCode?lat=' . $_REQUEST['Lat'] . '&lng=' . $_REQUEST['Lng'] . '&username=mitchcann'
+	$url='api.geonames.org/countryCode?lat=' . $_REQUEST['Lat'] . '&lng=' . $_REQUEST['Lng'] . '&username=mitchcann';
 
 
 	$ch = curl_init();
@@ -23,7 +23,7 @@
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
-	$output['data'] = $decode['geonames'];
+	$output['data'] = $decode;
 	
 	header('Content-Type: application/json; charset=UTF-8');
 

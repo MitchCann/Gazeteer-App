@@ -222,7 +222,7 @@ map.on('click', function(e) {
 });
 
 
-// fetching info from Geonames API
+// Return Country Code
 $('#btnRun').click(function() {
 
     /*$("#country-capital").html( 
@@ -236,8 +236,8 @@ $('#btnRun').click(function() {
             type: 'POST',
             dataType: 'json',
             data: {
-                lat: currentLat,
-                lng: currentLng,
+                Lat: currentLat,
+                Lng: currentLng,
            },
       
             success: function(result) {
@@ -245,9 +245,8 @@ $('#btnRun').click(function() {
       
                 if (result.status.name == "ok") {
                      iso2CountryCode = result.data;
-                    //console.log(result.data);
-                     console.log(jqXHR.responseText);
-                    $('#country-capital').html('<td>London</td>');
+                    //console.log(result.data);                   
+                    $('#country-code').html('<td>' + result['data'] + '</td>');
                 }
       
             },
