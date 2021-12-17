@@ -4,6 +4,8 @@ var countryName;
 let iso2CountryCode;
 let visitedCountries = [];
 let popup;
+let currentLat;
+let currentLng;
 
 $(document).ready(function(){
     
@@ -94,7 +96,7 @@ const successCallback = (position) => {
 
 const errorCallback = (error) => {
           console.error(error);
-          console.log(jqXHR.responseText);
+          console.log(error.responseText);
 }
 navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
 
@@ -242,12 +244,15 @@ $('#btnRun').click(function() {
                 
             if (result.status.name == "ok") {
                 iso2CountryCode = result.data;
-                console.log(result.data);
-                
+                //console.log(result.data);
+                console.log(jqXHR.responseText);
                 $('#country-capital').html('<td>London</td>');
                 
             
         
+            console.log(jqXHR.responseText);
+
+            console.log(errorThrown);
                     
             }
         },
