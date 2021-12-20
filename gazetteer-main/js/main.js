@@ -1,4 +1,4 @@
-
+var currencyCode;
 var border;
 var countryName;
 let iso2CountryCode;
@@ -6,6 +6,11 @@ let visitedCountries = [];
 let popup;
 let currentLat;
 let currentLng;
+let capitalCityWeather;
+let capitalCityLat;
+let capitalCityLon;
+let capitalCity;
+
 
 $(document).ready(function(){
     
@@ -222,41 +227,68 @@ map.on('click', function(e) {
 });
 
 
+
 // Return Country Code
 $('#btnRun').click(function() {
+    //Country Code 
+    $('#country-code').html('<td>' + $('#selCountry').val() + '</td>');
 
-    /*$("#country-capital").html( 
-        "<td>London</td>" 
-        ); */
+    $.ajax({
+        url: "./php/restCountries.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            country: $('#selCountry').val()   
+        },
+        success: function(result) {
+          
+            console.log('restCountries', result);
+            if (result.status.name == "ok") {
+                currencyCode = result.currency.code;
+                capitalCityWeather= result.capital;
+                iso2CountryCode = result.data.alpha2Code;
+                var countryName2 = result.data.name;
+                countryName = countryName2.replace(/\s+/g, '_');
+                console.log(capitalCityWeather);
+                
+                $('#country-capital').html('<td>' + result.capital + '</td>');
+                $('#country-population').html('<td>' + result.population.toLocaleString("en-US") + '</td>');
+                $('#country-currency').html('<td>' + result.currency.name + '</td>');
+                $('#country-language').html('<td>' + result.language.name + '</td>');
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR.responseText);
+            console.log(errorThrown);
+        } 
+    });
 
+    //openWeather API          
+    $.ajax({
+        url: "./php/openWeather.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            capital: capitalCityWeather,
+        }, 
+        success: function(result) {
+            console.log('CurrentCapitalWeather', result);
+            
+            
+            if (result.status.name == "ok") {
 
-        $.ajax({
+                //$('#country-weather').html('&nbsp;&nbsp;&nbsp;&nbsp;Today: &nbsp;&nbsp;'+ result.weatherData.weather[0].description +'&nbsp;&nbsp; || &nbsp;&nbsp; current temp: &nbsp;' + result.weatherData.main.temp +'&#8451<br>');
+                $('#country-weather').html('<td>' + result.weatherData.weather[0].description + '</td>');
+                //$('#txtCapitalWeatherHi').html('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;High: ' + result.weatherData.main.temp_max +'&#8451<br>');
+            }
+        },
 
-            url: "./php/countryCode.php",
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                Lat: currentLat,
-                Lng: currentLng,
-           },
-      
-            success: function(result) {
-                console.log('restCountries', result);
-      
-                if (result.status.name == "ok") {
-                     iso2CountryCode = result.data;
-                    //console.log(result.data);                   
-                    $('#country-code').html('<td>' + result['data'] + '</td>');
-                }
-      
-            },
-      
-            error: function(jqXHR, textStatus, errorThrown) {
-              console.log(jqXHR.responseText);
-              console.log(errorThrown);
-            }  
-      
-        }); 
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR.responseText);
+            console.log(errorThrown);
+        } 
+    })
+        
   });
 
 
