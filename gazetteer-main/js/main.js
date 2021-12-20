@@ -6,10 +6,10 @@ let visitedCountries = [];
 let popup;
 let currentLat;
 let currentLng;
-let capitalCityWeather;
+let currentCapital;
 let capitalCityLat;
 let capitalCityLon;
-let capitalCity;
+let capitalCity = [git ];
 
 
 $(document).ready(function(){
@@ -245,11 +245,11 @@ $('#btnRun').click(function() {
             console.log('restCountries', result);
             if (result.status.name == "ok") {
                 currencyCode = result.currency.code;
-                capitalCityWeather= result.capital;
+                currentCapital= result.capital;
                 iso2CountryCode = result.data.alpha2Code;
                 var countryName2 = result.data.name;
                 countryName = countryName2.replace(/\s+/g, '_');
-                console.log(capitalCityWeather);
+                console.log(currentCapital);
                 
                 $('#country-capital').html('<td>' + result.capital + '</td>');
                 $('#country-population').html('<td>' + result.population.toLocaleString("en-US") + '</td>');
@@ -269,10 +269,10 @@ $('#btnRun').click(function() {
         type: 'POST',
         dataType: 'json',
         data: {
-            capital: capitalCityWeather,
+            capital: currentCapital,
         }, 
         success: function(result) {
-            console.log('CurrentCapitalWeather', result);
+            console.log('currentCapital', result);
             
             
             if (result.status.name == "ok") {
