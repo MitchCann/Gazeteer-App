@@ -9,7 +9,7 @@ let currentLng;
 let currentCapital;
 let capitalCityLat;
 let capitalCityLon;
-let capitalCity = [git ];
+let capitalCity;
 
 
 $(document).ready(function(){
@@ -232,6 +232,8 @@ map.on('click', function(e) {
 $('#btnRun').click(function() {
     //Country Code 
     $('#country-code').html('<td>' + $('#selCountry').val() + '</td>');
+    
+    
 
     $.ajax({
         url: "./php/restCountries.php",
@@ -255,15 +257,11 @@ $('#btnRun').click(function() {
                 $('#country-population').html('<td>' + result.population.toLocaleString("en-US") + '</td>');
                 $('#country-currency').html('<td>' + result.currency.name + '</td>');
                 $('#country-language').html('<td>' + result.language.name + '</td>');
+                //Wiki link 
+                document.getElementById("myLink").href = "https://en.wikipedia.org/wiki/" + countryName;
             }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR.responseText);
-            console.log(errorThrown);
-        } 
-    });
 
-    //openWeather API          
+            //openWeather API          
     $.ajax({
         url: "./php/openWeather.php",
         type: 'POST',
@@ -277,9 +275,7 @@ $('#btnRun').click(function() {
             
             if (result.status.name == "ok") {
 
-                //$('#country-weather').html('&nbsp;&nbsp;&nbsp;&nbsp;Today: &nbsp;&nbsp;'+ result.weatherData.weather[0].description +'&nbsp;&nbsp; || &nbsp;&nbsp; current temp: &nbsp;' + result.weatherData.main.temp +'&#8451<br>');
-                $('#country-weather').html('<td>' + result.weatherData.weather[0].description + '</td>');
-                //$('#txtCapitalWeatherHi').html('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;High: ' + result.weatherData.main.temp_max +'&#8451<br>');
+                $('#country-weather').html('<td id=weather>' + result.weatherData.weather[0].description + '</td>');
             }
         },
 
@@ -288,6 +284,13 @@ $('#btnRun').click(function() {
             console.log(errorThrown);
         } 
     })
+        },
+        
+        
+        
+    });
+
+    
         
   });
 

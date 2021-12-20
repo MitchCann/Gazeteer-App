@@ -114,7 +114,7 @@ h3 {
 }
 
 
-/* ------------------- botones ------------------ */
+/*  buttons */
 
 button {
   padding: 0;
@@ -122,64 +122,6 @@ button {
   height: 37px;
   line-height: 0px;
 }
-
-
-
-
-  /* fichas */
-#nav-covid {
-  text-align: left;
-  padding-left: 20px;
-  padding-top: 40px;
-}
-
-#nav-currency {
-  text-align: left;
-  padding-left: 20px;
-  padding-top: 40px;
-}
-
-#nav-generalInfo {
-  text-align: left;
-  padding-left: 20px;
-  padding-top: 40px;
-}
-
-#nav-home {
-  padding-left: 20px;
-  padding-top: 20px;
-}
-
-#nav-weather{
-  padding-top: 40px;
-  /*padding-left: 20px;*/
-}
-
-#nav-wikiPlaces {
- /* padding-left: 20px;*/
-  padding-top: 20px;
-}
-
-#nav-news {
-  padding-top: 20px;
-  padding-left: 10px;
-}
-
-#txtCovidDeaths {
-  font-weight: bold;
-  animation:blinkingTextRed 0.9s infinite;
-}
-
-#txtCovidDeathRate {
-  animation:blinkingTextRed 0.9s infinite;
-}
-
-#txtHeadlineTitle {
-  font-weight: bold;
-  color: green;
-  text-align: center;
-}
-
 
 
 .nav-link {
@@ -206,4 +148,8 @@ button {
   border-color: white !important;
   padding: 0% !important;
 
+}
+
+#bootstrap-overide {
+  text-transform: capitalize;
 }
