@@ -14,7 +14,7 @@
     $output['status']['executedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
 
     $output['data']['border'] = $border;
-    $output['data']['countryInfo'] = $countryInfo;
+    
     
     //repeat above line for each API result
 

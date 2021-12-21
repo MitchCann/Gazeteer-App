@@ -153,3 +153,13 @@ button {
 #bootstrap-overide {
   text-transform: capitalize;
 }
+
+@media only screen and (max-width: 600px) {
+  #selCountry {
+    
+      border-radius: 5px;
+      text-align: center;
+      border-color: white;
+    
+  }
+}

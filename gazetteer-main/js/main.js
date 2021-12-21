@@ -8,7 +8,7 @@ let currentLat;
 let currentLng;
 let currentCapital;
 let capitalCityLat;
-let capitalCityLon;
+let capitalCityLng;
 let capitalCity;
 
 
@@ -17,6 +17,8 @@ $(document).ready(function(){
     //Preloader
     $(".preloader").hide(); 
 
+    
+    
 })
 
 // Leaflet Map 
@@ -41,6 +43,7 @@ var map = L.map('map', {
 L.control.layers(baseMaps).addTo(map);
 
 var myCircles = new L.featureGroup().addTo(map);
+
 
 
 // Select Dropdown
@@ -95,8 +98,33 @@ const successCallback = (position) => {
       error: function(jqXHR, textStatus, errorThrown) {
           console.log(textStatus, errorThrown);
           console.log(jqXHR.responseText);
-      }
-  }); 
+      },
+
+     
+  });
+  
+  $.ajax({
+        url: "./php/capital.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+        country: $('#selCountry').val()   
+    },
+    success: function(result) {
+          
+        console.log('restCountries', result);
+        if (result.status.name == "ok") {
+            currencyCode = result.currency.code;
+            let capitalCityLat  = result.capitalLat;
+            let capitalCityLng = result.capitalLng;
+            console.log(capitalCityLat, capitalCityLng);
+           
+        }
+         }, error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+    },
+ })
 }
 
 const errorCallback = (error) => {
@@ -271,6 +299,8 @@ $('#btnRun').click(function() {
         }, 
         success: function(result) {
             console.log('currentCapital', result);
+            capitalCityLat = result.weatherData.coord.lat;
+            capitalCityLon = result.weatherData.coord.lon;
             
             
             if (result.status.name == "ok") {
