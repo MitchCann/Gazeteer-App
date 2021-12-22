@@ -7,10 +7,12 @@ let popup;
 let currentLat;
 let currentLng;
 let currentCapital;
-let capitalCityLat;
-let capitalCityLng;
+let capitalLat;
+let capitalLng;
 let capitalCity;
 let countryOptionText;
+let marker;
+
 
 
 $(document).ready(function(){
@@ -44,6 +46,7 @@ var map = L.map('map', {
 L.control.layers(baseMaps).addTo(map);
 
 var myCircles = new L.featureGroup().addTo(map);
+var layerGroup = L.layerGroup().addTo(map);
 
 
 
@@ -106,30 +109,6 @@ const successCallback = (position) => {
      
   });
 
- 
-  
-  $.ajax({
-        url: "./php/capital.php",
-        type: 'POST',
-        dataType: 'json',
-        data: {
-        country: ($('#selCountry').val()),
-    },
-    success: function(result) {
-          
-        console.log('restCountries', result);
-        if (result.status.name == "ok") {
-            
-            let capitalCityLat  = result.capitalLat;
-            let capitalCityLng = result.capitalLng;
-            console.log(capitalCityLat, capitalCityLng);
-           
-        }
-         }, error: function(jqXHR, textStatus, errorThrown) {
-            console.log(textStatus, errorThrown);
-        console.log(jqXHR.responseText);
-    },
- })
 }
 
 const errorCallback = (error) => {
@@ -144,12 +123,42 @@ navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
 $('#selCountry').on('change', function() {
   let countryCode = $('#selCountry').val();
   let countryOptionText= $('#selCountry').find('option:selected').text();
+  layerGroup.clearLayers();
    
   // Check if country in array
   if(!visitedCountries.includes(countryOptionText)) {
     visitedCountries.push(countryOptionText)
     console.log('Array visited countries', visitedCountries)
   }
+
+  $.ajax({
+    url: "./php/capital.php",
+    type: 'POST',
+    dataType: 'json',
+    data: {
+    country: $('#selCountry').val(),
+},
+success: function(result) {
+      
+    console.log('restCountries', result);
+    if (result.status.name == "ok") {
+        
+        let capitalLat  = result.capitalLat;
+        let capitalLng = result.capitalLng;
+        console.log(capitalLat);
+        console.log(capitalLng);
+        var marker = L.marker([result.capitalLat, result.capitalLng]).addTo(layerGroup).on('click', function(e) {
+            console.log("click click");
+            marker.bindPopup("<b>Capital City:</b><br>" + result.capital).openPopup();
+        });;
+        
+       
+    }
+     }, error: function(jqXHR, textStatus, errorThrown) {
+        console.log(textStatus, errorThrown);
+    console.log(jqXHR.responseText);
+},
+})
   
   //Home Default 
   const showFirstTab = function () {
@@ -194,6 +203,10 @@ $('#selCountry').on('change', function() {
             duration: 2,
             });                          
     },
+
+
+
+    
     error: function(jqXHR, textStatus, errorThrown) {
       // your error code
       console.log(textStatus, errorThrown);

@@ -163,3 +163,9 @@ button {
     
   }
 }
+
+.leaflet-popup-content {
+  margin: 13px 19px;
+  line-height: 1.4;
+  text-align: center;
+}

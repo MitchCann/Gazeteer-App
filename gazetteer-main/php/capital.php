@@ -18,9 +18,10 @@
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "mission saved";
 	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['capitalCityLat'] = $decode;
-    $output['capitalCityLng'] = $decode;
-	$output['data'] = $decode;
+    $output['data'] = $decode[0]["capitalInfo"]["latlng"];
+    $output['capitalLat'] = $decode[0]["capitalInfo"]["latlng"][0];
+    $output['capitalLng'] = $decode[0]["capitalInfo"]["latlng"][1];
+    $output['capital'] = $decode[0]["capital"];
 	
 	header('Content-Type: application/json; charset=UTF-8');
 
