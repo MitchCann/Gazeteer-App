@@ -10,6 +10,7 @@ let currentCapital;
 let capitalCityLat;
 let capitalCityLng;
 let capitalCity;
+let countryOptionText;
 
 
 $(document).ready(function(){
@@ -93,6 +94,8 @@ const successCallback = (position) => {
           
           let currentCountry = result.data[0].components["ISO_3166-1_alpha-3"];
           $("#selCountry").val(currentCountry).change();
+          
+          
       
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -102,19 +105,21 @@ const successCallback = (position) => {
 
      
   });
+
+ 
   
   $.ajax({
         url: "./php/capital.php",
         type: 'POST',
         dataType: 'json',
         data: {
-        country: $('#selCountry').val()   
+        country: ($('#selCountry').val()),
     },
     success: function(result) {
           
         console.log('restCountries', result);
         if (result.status.name == "ok") {
-            currencyCode = result.currency.code;
+            
             let capitalCityLat  = result.capitalLat;
             let capitalCityLng = result.capitalLng;
             console.log(capitalCityLat, capitalCityLng);
@@ -122,7 +127,7 @@ const successCallback = (position) => {
         }
          }, error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
-            console.log(jqXHR.responseText);
+        console.log(jqXHR.responseText);
     },
  })
 }

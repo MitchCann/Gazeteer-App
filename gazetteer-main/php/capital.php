@@ -1,7 +1,7 @@
 <?php
 
 	$executionStartTime = microtime(true) / 1000;
-	$url='https://restcountries.com/v3.1/name/'. $_REQUEST['country'];
+	$url='https://restcountries.com/v3.1/alpha/'. $_REQUEST['country'];
 
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -18,8 +18,8 @@
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "mission saved";
 	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['capitalCityLat'] = $decode["capitalInfo"];
-	$output['capitalCityLng'] = $decode["capitalInfo"];
+	$output['capitalCityLat'] = $decode;
+    $output['capitalCityLng'] = $decode;
 	$output['data'] = $decode;
 	
 	header('Content-Type: application/json; charset=UTF-8');
