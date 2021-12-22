@@ -13,6 +13,13 @@ let capitalCity;
 let countryOptionText;
 let marker;
 
+var redMarker = L.ExtraMarkers.icon({
+    icon: 'fa-landmark',
+    markerColor: 'violet',
+    shape: 'square',
+    prefix: 'fa'
+  });
+
 
 
 $(document).ready(function(){
@@ -147,7 +154,7 @@ success: function(result) {
         let capitalLng = result.capitalLng;
         console.log(capitalLat);
         console.log(capitalLng);
-        var marker = L.marker([result.capitalLat, result.capitalLng]).addTo(layerGroup).on('click', function(e) {
+        var marker = L.marker([result.capitalLat, result.capitalLng], {icon: redMarker}).addTo(layerGroup).on('click', function(e) {
             console.log("click click");
             marker.bindPopup("<b>Capital City:</b><br>" + result.capital).openPopup();
         });;
