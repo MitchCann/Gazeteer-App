@@ -60,17 +60,13 @@ animation: shake 1.5s infinite;
   pointer-events: auto;   
 }
 
-.leaflet-control-container { 
-  position: absolute; 
-  top: 65px;
-} 
 
 h3 {
   padding-left: 1rem;
 }
 #selCountry{
   border-radius: 5px;
-  text-align: center;
+  text-align: left;
   border-color: white;
 }
 #btnRun{

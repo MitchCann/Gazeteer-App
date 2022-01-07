@@ -22,15 +22,6 @@ var redMarker = L.ExtraMarkers.icon({
 
 
 
-$(document).ready(function(){
-    
-    //Preloader
-    $(".preloader").hide(); 
-
-    
-    
-})
-
 // Leaflet Map 
 
 
@@ -97,6 +88,9 @@ const successCallback = (position) => {
           
           let currentCountry = result.data[0].components["ISO_3166-1_alpha-3"];
           $("#selCountry").val(currentCountry).change();
+
+          
+
           
           
       
@@ -149,7 +143,7 @@ success: function(result) {
         console.log(capitalLng);
         var marker = L.marker([result.capitalLat, result.capitalLng], {icon: redMarker}).addTo(layerGroup).on('click', function(e) {
             console.log("click click");
-            marker.bindPopup("<b>Capital City:</b><br>" + result.capital).openPopup();
+            marker.bindPopup(result.capital + "<br>(Capital City)" +"<br><a href='https://en.wikipedia.org/wiki/" + result.capital + "' target='_blank'>Wiki Link</a>").openPopup();
         });;
         
        
@@ -201,7 +195,10 @@ success: function(result) {
             map.fitBounds(bounds, {
             padding: [35, 35], 
             duration: 2,
-            });                          
+            });      
+            
+            //Preloader
+    $(".preloader").hide(); 
     },
 
 
