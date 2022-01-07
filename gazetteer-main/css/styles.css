@@ -88,11 +88,6 @@ h3 {
 }
 
 
-.leaflet-control-scale-line {
-  position: relative;
-  z-index: 35;
-}
-
 
 .leaflet-control-zoom {
   position: absolute; 
