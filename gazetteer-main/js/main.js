@@ -198,7 +198,7 @@ success: function(result) {
                                                         opacity: 0.75
                                                         }).addTo(map);
         let bounds = border.getBounds();
-            map.flyToBounds(bounds, {
+            map.fitBounds(bounds, {
             padding: [35, 35], 
             duration: 2,
             });                          
