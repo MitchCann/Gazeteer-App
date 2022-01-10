@@ -40,6 +40,33 @@ var Stadia_Outdoors = L.tileLayer('https://tiles.stadiamaps.com/tiles/outdoors/{
 }).addTo(map);
 
 
+// New Select Dropdown
+$.ajax({
+	url: "./php/getCountrySelect.php",
+	type: 'POST',
+	dataType: "json",
+	
+	success: function(result) {
+		console.log(' new populate options' , result);
+        if (result.status.name == "ok") {
+            for (var i=0; i<result.data.country.feature.length; i++) {
+                        $('#selCountry').append($('<option>', {
+                            value: result.data.country.feature[i].properties.iso_a3,
+                            text: result.data.country.feature[i].properties.name,
+                        }));
+                    }
+                }
+            //sort options alphabetically
+            $("#selCountry").html($("#selCountry option").sort(function (a, b) {
+                return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
+            }))
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+        }
+      });
+
 
 // Select Dropdown
 $.ajax({
