@@ -49,10 +49,10 @@ $.ajax({
 	success: function(result) {
 		console.log(' new populate options' , result);
         if (result.status.name == "ok") {
-            for (var i=0; i<result.data.country.feature.length; i++) {
+            for (var i=0; i<result.data.length; i++) {
                         $('#selCountry').append($('<option>', {
-                            value: result.data.country.feature[i].properties.iso_a3,
-                            text: result.data.country.feature[i].properties.name,
+                            value: result.data[i].code,
+                            text: result.data[i].name,
                         }));
                     }
                 }
@@ -67,33 +67,6 @@ $.ajax({
         }
       });
 
-
-// Select Dropdown
-$.ajax({
-	url: "./php/geoJson.php",
-	type: 'POST',
-	dataType: "json",
-	
-	success: function(result) {
-		console.log('populate options' , result);
-        if (result.status.name == "ok") {
-            for (var i=0; i<result.data.border.features.length; i++) {
-                        $('#selCountry').append($('<option>', {
-                            value: result.data.border.features[i].properties.iso_a3,
-                            text: result.data.border.features[i].properties.name,
-                        }));
-                    }
-                }
-            //sort options alphabetically
-            $("#selCountry").html($("#selCountry option").sort(function (a, b) {
-                return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
-            }))
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log(textStatus, errorThrown);
-            console.log(jqXHR.responseText);
-        }
-      });
 
 // User Location
 const successCallback = (position) => {
@@ -115,11 +88,6 @@ const successCallback = (position) => {
           
           let currentCountry = result.data[0].components["ISO_3166-1_alpha-3"];
           $("#selCountry").val(currentCountry).change();
-
-          
-
-          
-          
       
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -191,6 +159,7 @@ success: function(result) {
     url: "./php/geoJson.php",
     type: 'POST',
     dataType: 'json',
+    country: $('#selCountry').val(),
     success: function(result) {
 
         console.log('all borders result', result);
@@ -303,7 +272,7 @@ $('#btnRun').click(function() {
     //Country Code 
     $('#country-code').html('<td>' + $('#selCountry').val() + '</td>');
     
-    
+// Info Modal  
 
     $.ajax({
         url: "./php/restCountries.php",
@@ -318,8 +287,7 @@ $('#btnRun').click(function() {
             if (result.status.name == "ok") {
                 currencyCode = result.currency.code;
                 currentCapital= result.capital;
-                iso2CountryCode = result.data.alpha2Code;
-                var countryName2 = result.data.name;
+                var countryName2 = result.name;
                 countryName = countryName2.replace(/\s+/g, '_');
                 console.log(currentCapital);
                 
@@ -331,7 +299,7 @@ $('#btnRun').click(function() {
                 document.getElementById("myLink").href = "https://en.wikipedia.org/wiki/" + countryName;
             }
 
-            //openWeather API          
+    //openWeather API          
     $.ajax({
         url: "./php/openWeather.php",
         type: 'POST',

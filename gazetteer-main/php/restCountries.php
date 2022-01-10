@@ -22,8 +22,9 @@
 	$output['capital'] = $decode["capital"];
 	$output['population'] = $decode["population"];
 	$output['language'] = $decode["languages"][0];
-	$output['data'] = $decode;
+	$output['name'] = $decode["name"][0];
 	
+
 	header('Content-Type: application/json; charset=UTF-8');
 
 	echo json_encode($output); 
