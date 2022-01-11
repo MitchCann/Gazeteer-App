@@ -125,7 +125,7 @@ $('#selCountry').on('change', function() {
     type: 'POST',
     dataType: 'json',
     data: {
-    country: $('#selCountry').val(),
+    countryName: $('#selCountry').val(),
 },
 success: function(result) {
       
@@ -168,10 +168,10 @@ success: function(result) {
             map.removeLayer(border);
         }
           
-        let countryArray = [];
+        let countryArray = result.countryArray;
         let countryOptionTextArray = [];
     
-        for (let i = 0; i < result.data.border.features.length; i++) {
+        /*for (let i = 0; i < result.data.border.features.length; i++) {
             if (result.data.border.features[i].properties.iso_a3 === countryCode) {
                 countryArray.push(result.data.border.features[i]);
             }
@@ -180,9 +180,9 @@ success: function(result) {
             if (result.data.border.features[i].properties.name === countryOptionText) {
                 countryOptionTextArray.push(result.data.border.features[i]);
             }
-        };
+        }; */
      
-        border = L.geoJSON(countryOptionTextArray[0], {
+        border = L.geoJSON(countryArray[0], {
                                                         color: 'lime',
                                                         weight: 3,
                                                         opacity: 0.75
