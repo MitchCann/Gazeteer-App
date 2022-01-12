@@ -1,7 +1,7 @@
 var currencyCode;
 var border;
 var countryName;
-
+let iso_a2;
 let visitedCountries = [];
 let popup;
 let currentLat;
@@ -160,7 +160,7 @@ success: function(result) {
     type: 'POST',
     dataType: 'json',
     data: {
-        country: $('#selCountry').val(),
+        iso_a2: $('#selCountry').val(),
     },
 
     success: function(result) {
