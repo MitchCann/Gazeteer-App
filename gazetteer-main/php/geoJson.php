@@ -18,11 +18,10 @@
   $borders = [];
 
 
-  $i = 0;
 
   for ($i = 0; $i < count($decode['features']); $i++) {
 
-    if($decode['features'] === $_REQUEST['iso_a2']){
+    if($decode['features'][$i]["properties"]["iso_a2"] === $_REQUEST['iso_a2']){
       array_push($borders,$decode['features'][$i]['geometry']);
     }
 
