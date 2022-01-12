@@ -7,7 +7,8 @@
 
   $executionStartTime = microtime(true);
 
-    $result = file_get_contents("../json/countryBorders.geo.json");
+
+  $result = file_get_contents("countryBorders.geo.json");
 
 
   $decode = json_decode($result,true);
