@@ -125,7 +125,7 @@ $('#selCountry').on('change', function() {
     type: 'POST',
     dataType: 'json',
     data: {
-    countryName: iso_a2,
+    country: iso_a2,
 },
 success: function(result) {
       
@@ -171,7 +171,7 @@ success: function(result) {
             map.removeLayer(border);
         }
           
-        let countryArray = result.countryArray;
+        let countryArray = result.data.borders;
         let countryOptionTextArray = [];
     
         /*for (let i = 0; i < result.data.border.features.length; i++) {
