@@ -1,7 +1,7 @@
 var currencyCode;
 var border;
 var countryName;
-let iso2CountryCode;
+
 let visitedCountries = [];
 let popup;
 let currentLat;
@@ -110,7 +110,7 @@ navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
 // Border
 
 $('#selCountry').on('change', function() {
-  let countryCode = $('#selCountry').val();
+  let iso_a2 = $('#selCountry').val();
   let countryOptionText= $('#selCountry').find('option:selected').text();
   layerGroup.clearLayers();
    
@@ -125,7 +125,7 @@ $('#selCountry').on('change', function() {
     type: 'POST',
     dataType: 'json',
     data: {
-    countryName: $('#selCountry').val(),
+    countryName: iso_a2,
 },
 success: function(result) {
       
@@ -159,7 +159,10 @@ success: function(result) {
     url: "./php/geoJson.php",
     type: 'POST',
     dataType: 'json',
-    country: $('#selCountry').val(),
+    data: {
+        country: $('#selCountry').val(),
+    },
+
     success: function(result) {
 
         console.log('all borders result', result);
