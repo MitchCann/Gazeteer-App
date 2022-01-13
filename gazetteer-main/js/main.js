@@ -35,19 +35,19 @@ var myCircles = new L.featureGroup().addTo(map);
 var layerGroup = L.layerGroup().addTo(map);
 
 var Stadia_Outdoors = L.tileLayer('https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png', {
-	maxZoom: 20,
-	attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+    maxZoom: 20,
+    attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
 }).addTo(map);
 
 
 // New Select Dropdown
 $.ajax({
-	url: "./php/getCountrySelect.php",
-	type: 'POST',
-	dataType: "json",
-	
-	success: function(result) {
-		console.log(' new populate options' , result);
+    url: "./php/getCountrySelect.php",
+    type: 'POST',
+    dataType: "json",
+    
+    success: function(result) {
+        console.log(' new populate options' , result);
         if (result.status.name == "ok") {
             for (var i=0; i<result.data.length; i++) {
                         $('#selCountry').append($('<option>', {
@@ -57,9 +57,9 @@ $.ajax({
                     }
                 }
             //sort options alphabetically
-            $("#selCountry").html($("#selCountry option").sort(function (a, b) {
-                return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
-            }))
+            // $("#selCountry").html($("#selCountry option").sort(function (a, b) {
+            //     return a.text == b.text ? 0 : a.text < b.text ? -1 : 1;
+            // }));
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
@@ -84,9 +84,9 @@ const successCallback = (position) => {
           currentLat = result.data[0].geometry.lat;
           currentLng = result.data[0].geometry.lng;
            
-          $("selectOpt select").val(result.data[0].components["ISO_3166-1_alpha-3"]);
+          $("selectOpt select").val(result.data[0].components["ISO_3166-1_alpha-2"]);
           
-          let currentCountry = result.data[0].components["ISO_3166-1_alpha-3"];
+          let currentCountry = result.data[0].components["ISO_3166-1_alpha-2"];
           $("#selCountry").val(currentCountry).change();
       
       },
@@ -138,9 +138,30 @@ success: function(result) {
         console.log(capitalLng);
         var marker = L.marker([result.capitalLat, result.capitalLng], {icon: redMarker}).addTo(layerGroup).on('click', function(e) {
             console.log("click click");
-            marker.bindPopup(result.capital + "<br>(Capital City)" +"<br><a href='https://en.wikipedia.org/wiki/" + result.capital + "' target='_blank'>Wiki Link</a>").openPopup();
+            marker.bindPopup("<strong>" + result.capital + "</strong>" + "<br>(Capital City)" +"<br><a href='https://en.wikipedia.org/wiki/" + result.capital + "' target='_blank'>Wiki Link</a>").openPopup();
         });;
         
+       
+    }
+     }, error: function(jqXHR, textStatus, errorThrown) {
+        console.log(textStatus, errorThrown);
+    console.log(jqXHR.responseText);
+},
+})
+    
+$.ajax({
+    url: "./php/webcams.php",
+    type: 'POST',
+    dataType: 'json',
+    data: {
+    country: iso_a2,
+},
+success: function(result) {
+      
+    console.log('webcams are working', result);
+    if (result.status.name == "ok") {
+        
+      
        
     }
      }, error: function(jqXHR, textStatus, errorThrown) {
@@ -155,6 +176,7 @@ success: function(result) {
        }
   showFirstTab();
 
+  console.log($('#selCountry').val());
   $.ajax({
     url: "./php/geoJson.php",
     type: 'POST',
@@ -171,7 +193,7 @@ success: function(result) {
             map.removeLayer(border);
         }
           
-        let countryArray = result.data.borders;
+        let countryArray = result.data;
         let countryOptionTextArray = [];
     
         /*for (let i = 0; i < result.data.border.features.length; i++) {
@@ -228,7 +250,7 @@ map.on('click', function(e) {
 
     success: function(result) {
 
-        if (result.data[0].components["ISO_3166-1_alpha-3"]) {
+        if (result.data[0].components["ISO_3166-1_alpha-2"]) {
             console.log('openCage PHP',result);
             //console.log(typeof result);
             currentLat = result.data[0].geometry.lat;
@@ -237,9 +259,9 @@ map.on('click', function(e) {
             
            
 
-            $("selectOpt select").val(result.data[0].components["ISO_3166-1_alpha-3"]);
+            $("selectOpt select").val(result.data[0].components["ISO_3166-1_alpha-2"]);
             
-            let currentCountry = result.data[0].components["ISO_3166-1_alpha-3"];
+            let currentCountry = result.data[0].components["ISO_3166-1_alpha-2"];
             $("#selCountry").val(currentCountry).change();
         }
         else {
@@ -336,6 +358,3 @@ $('#btnRun').click(function() {
     
         
   });
-
-
-

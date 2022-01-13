@@ -20,7 +20,7 @@
 
         $temp = null;
 
-        $temp['code'] = $feature["properties"]['iso_a3'];
+        $temp['code'] = $feature["properties"]['iso_a2'];
 
         $temp['name'] = $feature["properties"]['name'];
 
