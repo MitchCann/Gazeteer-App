@@ -33,10 +33,10 @@ var quakeMarker = L.ExtraMarkers.icon({
 });
 
 var camMarker = L.ExtraMarkers.icon({
-    icon: 'fa-forumbee',
+    icon: 'fa-camera',
     markerColor: 'red',
     shape: 'square',
-    prefix: 'fab'
+    prefix: 'fas'
 })
 
 
@@ -142,21 +142,38 @@ $('#selCountry').on('change', function() {
  
   //Webcams
 
-    $.ajax({
-    url: "./php/webcams.php",
-    type: 'POST',
+  $.ajax({
+    url: './php/webcams.php',
     dataType: 'json',
+    type: 'POST',
     data: {
-    country: iso_a2,
-},
-    success: function(result) {
-        console.log('Webcams are working', result);
+      country: iso_a2,
     },
-     error: function(jqXHR, textStatus, errorThrown) {
+    success: function(result) {
+        console.log('webcams are working', result);
+          result['data'].forEach((webcams) => {
+              
+              const newMarker = L.marker([webcams.latitude, webcams.longitude], {
+                icon: redMarker,
+                type: 'webcam',
+                title: webcams.title,
+                latitude: webcams.latitude,
+                longitude: webcams.longitude,
+              }).addTo(layerGroup).on('click', function(e) {
+                console.log("clicked webcam");
+                newMarker.bindPopup("<strong>" + webcams.title + "</strong>" + "<br>(Capital City)" +"<br><a href='https://en.wikipedia.org/wiki/" + webcams.title + "' target='_blank'>Wiki Link</a>").openPopup();
+            });
+             
+            
+          });
+        
+
+    
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
         console.log(textStatus, errorThrown);
     console.log(jqXHR.responseText);
-  }
-});
+  }});
 
     //Cities
 
