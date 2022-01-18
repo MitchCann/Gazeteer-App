@@ -12,6 +12,11 @@ let capitalLng;
 let capitalCity;
 let countryOptionText;
 let marker;
+let north;
+let south;
+let east; 
+let west;
+
 
 var redMarker = L.ExtraMarkers.icon({
     icon: 'fa-landmark',
@@ -19,6 +24,20 @@ var redMarker = L.ExtraMarkers.icon({
     shape: 'square',
     prefix: 'fa'
   });
+
+var quakeMarker = L.ExtraMarkers.icon({
+    icon: 'fa-forumbee',
+    markerColor: 'blue',
+    shape: 'square',
+    prefix: 'fab'
+});
+
+var camMarker = L.ExtraMarkers.icon({
+    icon: 'fa-forumbee',
+    markerColor: 'red',
+    shape: 'square',
+    prefix: 'fab'
+})
 
 
 
@@ -120,56 +139,171 @@ $('#selCountry').on('change', function() {
     console.log('Array visited countries', visitedCountries)
   }
 
-  $.ajax({
-    url: "./php/capital.php",
-    type: 'POST',
-    dataType: 'json',
-    data: {
-    country: iso_a2,
-},
-success: function(result) {
-      
-    console.log('restCountries', result);
-    if (result.status.name == "ok") {
-        
-        let capitalLat  = result.capitalLat;
-        let capitalLng = result.capitalLng;
-        console.log(capitalLat);
-        console.log(capitalLng);
-        var marker = L.marker([result.capitalLat, result.capitalLng], {icon: redMarker}).addTo(layerGroup).on('click', function(e) {
-            console.log("click click");
-            marker.bindPopup("<strong>" + result.capital + "</strong>" + "<br>(Capital City)" +"<br><a href='https://en.wikipedia.org/wiki/" + result.capital + "' target='_blank'>Wiki Link</a>").openPopup();
-        });;
-        
-       
-    }
-     }, error: function(jqXHR, textStatus, errorThrown) {
-        console.log(textStatus, errorThrown);
-    console.log(jqXHR.responseText);
-},
-})
-    
-$.ajax({
+ 
+  //Webcams
+
+    $.ajax({
     url: "./php/webcams.php",
     type: 'POST',
     dataType: 'json',
     data: {
     country: iso_a2,
 },
-success: function(result) {
-      
-    console.log('webcams are working', result);
-    if (result.status.name == "ok") {
-        
-      
-       
-    }
-     }, error: function(jqXHR, textStatus, errorThrown) {
+    success: function(result) {
+        console.log('Webcams are working', result);
+    },
+     error: function(jqXHR, textStatus, errorThrown) {
         console.log(textStatus, errorThrown);
     console.log(jqXHR.responseText);
-},
-})
+  }
+});
+
+    //Cities
+
+    $.ajax({
+    url: './php/cities.php',
+    dataType: 'json',
+    type: 'POST',
+    data: {
+      country: iso_a2,
+    },
+    success: function(result) {
+        console.log('cities are working', result);
+        
+        const marker = L.ExtraMarkers.icon({
+            icon: ' fa-location-arrow',
+            markerColor: '#BBDEF0',
+            shape: 'square',
+            svg: true,
+            prefix: 'fa',
+          });
+          const capitalMarker = L.ExtraMarkers.icon({
+            icon: ' fa-location-arrow',
+            markerColor: '#2C95C9',
+            shape: 'star',
+            svg: true,
+            prefix: 'fa',
+          });
+          result['data'].forEach((city) => {
+              
+            //Check if the city is the capital
+            if (city.fcode == 'PPLC') {
+              //Change marker to indicate the capital
+              const newMarker = L.marker([city.lat, city.lng], {
+                icon: redMarker,
+                type: 'city',
+                name: city.name,
+                population: city.population,
+                latitude: city.lat,
+                longitude: city.lng,
+                capital: true,
+                geonameId: city.geonameId,
+              }).addTo(layerGroup).on('click', function(e) {
+                console.log("click click");
+                newMarker.bindPopup("<strong>" + city.name + "</strong>" + "<br>(Capital City)" +"<br><a href='https://en.wikipedia.org/wiki/" + result.capital + "' target='_blank'>Wiki Link</a>").openPopup();
+            });
+             
+            } else {
+              var newMarker = L.marker([city.lat, city.lng], {icon: marker, name: city.name, population: city.population, }).addTo(layerGroup).on('click', function(e) {
+                console.log("city clicked");
+
+                newMarker.bindPopup("<strong>" + city.name + "</strong>" + "<br>Population:"+ city.population +"<br><a href='https://en.wikipedia.org/wiki/" + city.name + "' target='_blank'>Wiki Link</a>").openPopup();
+            });
+              
+            }
+          });
+        
+
+    
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+        console.log(textStatus, errorThrown);
+    console.log(jqXHR.responseText);
+  }});
   
+  //Points of Interest
+
+    $.ajax({
+      url: './php/poi.php',
+      dataType: 'json',
+      type: 'POST',
+      data: {
+        countryCode: iso_a2,
+      },
+    })
+      .done((result) => {
+          console.log('POI Working', result)
+        const marker = L.ExtraMarkers.icon({
+          icon: 'fa-binoculars',
+          markerColor: '#AFD5AA',
+          shape: 'penta',
+          svg: true,
+          prefix: 'fa',
+        });
+        result['data'].forEach((poi) => {
+          const newMarker = L.marker([poi.lat, poi.lng], {
+            icon: marker,
+            name: poi.name,
+            latitude: poi.lat,
+            longitude: poi.lng,
+            type: 'monument',
+          }).addTo(layerGroup).on('click', function(e) {
+            console.log("click POI");
+            newMarker.bindPopup("<strong>" + poi.name + "</strong>" + "<br>Point of Interest" +"<br><a href='https://en.wikipedia.org/wiki/" + poi.name + "' target='_blank'>Wiki Link</a>").openPopup();
+        });
+        });
+        
+      });
+
+    // Earthquakes
+
+    $.ajax({
+        url: './php/compass.php',
+        dataType: 'json',
+        type: 'POST',
+        data: {
+          country: iso_a2,
+        },
+        success: function(result) {
+            console.log('compass is working', result);
+            north = result.data[0].north;
+            south = result.data[0].south;
+            west = result.data[0].west;        
+            east = result.data[0].east;
+            console.log(north, south, east, west);
+
+            $.ajax({
+                url: './php/earthquakes.php',
+                dataType: 'json',
+                type: 'POST',
+                data: {
+                  north: north,
+                  south: south,
+                  east: east,
+                  west: west,
+                },
+                success: function(result) {
+                  console.log('Earthquakes are working', result);
+                  result['data'].forEach((quake) => {
+                    const newerMarker = L.marker([quake.lat, quake.lng], {
+                      icon: quakeMarker,
+                      name: quake.name,
+                      latitude: quake.lat,
+                      longitude: quake.lng,
+                      date: quake.datetime,
+                      mag: quake.magnitude,
+                      type: 'quake',
+                    }).addTo(layerGroup).on('click', function(e) {
+                      console.log("click quake");
+                      newerMarker.bindPopup("<strong>Earthquake</strong><br>Magnitude:" + quake.magnitude + "<br>Happened Here:" +"<br>" + quake.datetime).openPopup();
+                  });
+                  });
+                  
+             }
+                
+              })
+       } });
+
   //Home Default 
   const showFirstTab = function () {
          $('#nav-home-tab').tab('show');
@@ -252,7 +386,7 @@ map.on('click', function(e) {
 
         if (result.data[0].components["ISO_3166-1_alpha-2"]) {
             console.log('openCage PHP',result);
-            //console.log(typeof result);
+           
             currentLat = result.data[0].geometry.lat;
             currentLng = result.data[0].geometry.lng;
 

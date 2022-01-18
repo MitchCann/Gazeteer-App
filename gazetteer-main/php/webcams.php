@@ -1,8 +1,10 @@
 <?php
 
 	$executionStartTime = microtime(true) / 1000;
-	$url='https://api.windy.com/api/webcams/v2/list/country='. $_REQUEST['country'] . '?key=CToFuKeb7w8YB3caZRZH09bxFsGOQv2m';
-    //$url='https://api.windy.com/api/webcams/v2/list/country='. $_REQUEST['country'] . '?show=webcams?key=CToFuKeb7w8YB3caZRZH09bxFsGOQv2m';
+	//$url='https://api.windy.com/api/webcams/v2/list/country='. $_REQUEST['country'] . '?key=CToFuKeb7w8YB3caZRZH09bxFsGOQv2m';
+    //$url='https://api.windy.com/api/webcams/v2/list/country='. $_REQUEST['country'] . '?show=webcams:location,image,player;&key=CToFuKeb7w8YB3caZRZH09bxFsGOQv2m';
+	$url='https://api.windy.com/api/webcams/v2/list/country=' . $_REQUEST['country'] . '?show=webcams:location,image,player;&key=CToFuKeb7w8YB3caZRZH09bxFsGOQv2m';
+
 
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -18,7 +20,6 @@
 
 	$output['status']['code'] = "200";
 	$output['status']['name'] = "ok";
-	$output['status']['description'] = "mission saved";
 	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
     $output['data'] = $decode;
     
