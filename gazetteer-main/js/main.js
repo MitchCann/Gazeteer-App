@@ -46,17 +46,21 @@ var camMarker = L.ExtraMarkers.icon({
 
 var map = L.map('map', {
     zoom: 10,
+    maxZoom: 15,
 }).fitWorld();
 
 
 
-var myCircles = new L.featureGroup().addTo(map);
-var layerGroup = L.layerGroup().addTo(map);
+var layerGroup = L.markerClusterGroup().addTo(map);
 
 var Stadia_Outdoors = L.tileLayer('https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png', {
     maxZoom: 20,
     attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
 }).addTo(map);
+
+
+//Market Cluster
+    var markers = L.markerClusterGroup();
 
 
 // New Select Dropdown
@@ -151,17 +155,17 @@ $('#selCountry').on('change', function() {
     },
     success: function(result) {
         console.log('webcams are working', result);
-          result.data.webcams.forEach((webcams) => {
+          result.data.result.webcams.forEach((webcams) => {
               
               const newMarker = L.marker([webcams.location.latitude, webcams.location.longitude], {
-                icon: redMarker,
+                icon: camMarker,
                 type: 'webcam',
                 title: webcams.title,
                 latitude: webcams.location.latitude,
                 longitude: webcams.location.longitude,
-              }).addTo(layerGroup).on('click', function(e) {
+              }).addTo(markers).on('click', function(e) {
                 console.log("clicked webcam");
-                newMarker.bindPopup("<strong>" + webcams.title + "</strong>" + "<br>(Capital City)" +"<br><a href='https://en.wikipedia.org/wiki/" + webcams.title + "' target='_blank'>Wiki Link</a>").openPopup();
+                newMarker.bindPopup("<strong>" + webcams.title + "</strong><br><br><iframe width='220' height='245' src='" + webcams.player.day.embed +"'></iframe>").openPopup();
             });
              
             
