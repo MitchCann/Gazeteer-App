@@ -151,14 +151,14 @@ $('#selCountry').on('change', function() {
     },
     success: function(result) {
         console.log('webcams are working', result);
-          result['data'].forEach((webcams) => {
+          [result.data.webcams].forEach((webcams) => {
               
-              const newMarker = L.marker([webcams.latitude, webcams.longitude], {
+              const newMarker = L.marker([webcams.location.latitude, webcams.location.longitude], {
                 icon: redMarker,
                 type: 'webcam',
                 title: webcams.title,
-                latitude: webcams.latitude,
-                longitude: webcams.longitude,
+                latitude: webcams.location.latitude,
+                longitude: webcams.location.longitude,
               }).addTo(layerGroup).on('click', function(e) {
                 console.log("clicked webcam");
                 newMarker.bindPopup("<strong>" + webcams.title + "</strong>" + "<br>(Capital City)" +"<br><a href='https://en.wikipedia.org/wiki/" + webcams.title + "' target='_blank'>Wiki Link</a>").openPopup();
