@@ -59,8 +59,18 @@ var Stadia_Outdoors = L.tileLayer('https://tiles.stadiamaps.com/tiles/outdoors/{
 }).addTo(map);
 
 
-//Market Cluster
+// Market Cluster
     var markers = L.markerClusterGroup();
+
+ //Easy Buttons
+    var helloPopup = L.popup().setContent('Hello World!');
+
+    L.easyButton('fa-globe', function(btn, map){
+        helloPopup.setLatLng(map.getCenter()).openOn(map);
+    }).addTo(map); 
+
+    
+      
 
 
 // New Select Dropdown
@@ -163,7 +173,7 @@ $('#selCountry').on('change', function() {
                 title: webcams.title,
                 latitude: webcams.location.latitude,
                 longitude: webcams.location.longitude,
-              }).addTo(markers).on('click', function(e) {
+              }).addTo(layerGroup).on('click', function(e) {
                 console.log("clicked webcam");
                 newMarker.bindPopup("<strong>" + webcams.title + "</strong><br><br><iframe width='220' height='245' src='" + webcams.player.day.embed +"'></iframe>").openPopup();
             });
