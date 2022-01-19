@@ -151,7 +151,7 @@ $('#selCountry').on('change', function() {
     },
     success: function(result) {
         console.log('webcams are working', result);
-          [result.data.webcams].forEach((webcams) => {
+          result.data.webcams.forEach((webcams) => {
               
               const newMarker = L.marker([webcams.location.latitude, webcams.location.longitude], {
                 icon: redMarker,
