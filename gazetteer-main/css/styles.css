@@ -107,12 +107,17 @@ h3 {
 
 /*  buttons */
 
-button {
+#btnrun {
   padding: 0;
   width: 32px;
   height: 37px;
   line-height: 0px;
 }
+
+.div.leaflet-bar.easy-button-container.leaflet-control {
+  margin-top: 150px !important;
+}
+
 
 
 .nav-link {
