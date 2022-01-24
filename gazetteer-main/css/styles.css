@@ -69,6 +69,7 @@ h3 {
   text-align: left;
   border-color: white;
 }
+
 #btnRun{
   margin-left: .5rem;
   background-color: #ffffff;
@@ -79,8 +80,14 @@ h3 {
 }
 
 .test {
-  margin-left: auto;
-  margin-right: auto;
+  height: fit-content;
+  width: fit-content;
+  position: absolute;
+  float: top;
+  z-index: 2;
+  
+  
+  pointer-events: auto;  
 }
 
 
