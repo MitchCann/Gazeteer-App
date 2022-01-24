@@ -455,6 +455,73 @@ map.on('click', function(e) {
 
 });
 
+$(document).ready(()=>{
+L.easyButton({
+  id: "info-button",
+  position: "topleft",
+  states: [{
+      stateName: "get-country-info",
+      onClick: function(btn, Map) {
+        $('#country-code').html('<td>' + $('#selCountry').val() + '</td>');
+        $.ajax({
+          url: "./php/restCountries.php",
+          type: 'POST',
+          dataType: 'json',
+          data: {
+              country: $('#selCountry').val()   
+          },
+          success: function(result) {
+            
+              console.log('restCountries', result);
+              if (result.status.name == "ok") {
+                  currencyCode = result.currency.code;
+                  currentCapital= result.capital;
+                  var countryName2 = result.name;
+                  countryName = countryName2.replace(/\s+/g, '_');
+                  console.log(currentCapital);
+                  
+                  $('#country-capital').html('<td>' + result.capital + '</td>');
+                  $('#country-population').html('<td>' + result.population.toLocaleString("en-US") + '</td>');
+                  $('#country-currency').html('<td>' + result.currency.name + '</td>');
+                  $('#country-language').html('<td>' + result.language.name + '</td>');
+                  //Wiki link 
+                  document.getElementById("myLink").href = "https://en.wikipedia.org/wiki/" + countryName;
+              }
+  
+      //openWeather API          
+      $.ajax({
+          url: "./php/openWeather.php",
+          type: 'POST',
+          dataType: 'json',
+          data: {
+              capital: currentCapital,
+          }, 
+          success: function(result) {
+              console.log('currentCapital', result);
+              capitalCityLat = result.weatherData.coord.lat;
+              capitalCityLon = result.weatherData.coord.lon;
+              
+              
+              if (result.status.name == "ok") {
+  
+                  $('#country-weather').html('<td id=weather>' + result.weatherData.weather[0].description + '</td>');
+              }
+          },
+  
+          error: function(jqXHR, textStatus, errorThrown) {
+              console.log(jqXHR.responseText);
+              console.log(errorThrown);
+          } 
+      })
+          },
+          
+          
+          
+      });
+      },
+      icon: "fa-info"
+  }]
+}).addTo(map) })
 
 
 // Return Country Code
