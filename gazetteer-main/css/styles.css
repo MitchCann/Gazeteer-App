@@ -85,10 +85,10 @@ h3 {
 
 
 
-.leaflet-control-zoom {
+/* .leaflet-control-zoom {
   position: absolute; 
   
-}
+} */
 
 /* Modal */
 
@@ -114,9 +114,9 @@ h3 {
   line-height: 0px;
 }
 
-.div.leaflet-bar.easy-button-container.leaflet-control {
+/* .div.leaflet-bar.easy-button-container.leaflet-control {
   margin-top: 150px !important;
-}
+} */
 
 
 
@@ -160,12 +160,12 @@ h3 {
   }
 }
 
-.leaflet-popup-content {
+/* .leaflet-popup-content {
   margin: 13px 19px;
   line-height: 1.4;
   text-align: center;
-}
+} */
 
-.leaflet-top .leaflet-control {
+/* .leaflet-top .leaflet-control {
   margin-top: 50px;
-}
+} */
