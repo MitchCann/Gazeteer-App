@@ -455,13 +455,13 @@ map.on('click', function(e) {
 
 });
 
-$(document).ready(()=>{
+
 L.easyButton({
   id: "info-button",
   position: "topleft",
   states: [{
       stateName: "get-country-info",
-      onClick: function(btn, Map) {
+      onClick: function() {
         $('#country-code').html('<td>' + $('#selCountry').val() + '</td>');
         $.ajax({
           url: "./php/restCountries.php",
@@ -521,7 +521,7 @@ L.easyButton({
       },
       icon: "fa-info"
   }]
-}).addTo(map) })
+}).addTo(map) 
 
 
 // Return Country Code
