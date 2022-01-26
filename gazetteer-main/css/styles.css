@@ -157,8 +157,8 @@ h3 {
 }
 
 .btn-secondary {
-  color: #fff;
-  background-color: blueviolet !important;
+  color: rgb(0, 0, 0);
+  background-color: white !important;
   border-color: white !important;
   padding: 0% !important;
 
@@ -178,11 +178,11 @@ h3 {
   }
 }
 
-/* .leaflet-popup-content {
+ .leaflet-popup-content {
   margin: 13px 19px;
   line-height: 1.4;
   text-align: center;
-} */
+} 
 
 /* .leaflet-top .leaflet-control {
   margin-top: 50px;

@@ -62,17 +62,6 @@ var Stadia_Outdoors = L.tileLayer('https://tiles.stadiamaps.com/tiles/outdoors/{
 // Market Cluster
     var markers = L.markerClusterGroup();
 
- //Easy Buttons
-    var helloPopup = L.popup().setContent('Hello World!');
-
-    L.easyButton('fa-globe', function(btn, map){
-        helloPopup.setLatLng(map.getCenter()).openOn(map);
-    }).addTo(map); 
-
-    
-      
-
-
 // New Select Dropdown
 $.ajax({
     url: "./php/getCountrySelect.php",
@@ -341,7 +330,6 @@ $('#selCountry').on('change', function() {
        }
   showFirstTab();
 
-  console.log($('#selCountry').val());
   $.ajax({
     url: "./php/geoJson.php",
     type: 'POST',
@@ -396,6 +384,8 @@ $('#selCountry').on('change', function() {
       console.log(jqXHR.responseText);
     }
   }); 
+
+  
 });
 
 
@@ -455,13 +445,16 @@ map.on('click', function(e) {
 
 });
 
+//Modal Apis 
 
+//Info Modal
 L.easyButton({
   id: "info-button",
   position: "topleft",
   states: [{
       stateName: "get-country-info",
       onClick: function() {
+        $("#exampleModal").modal("show")
         $('#country-code').html('<td>' + $('#selCountry').val() + '</td>');
         $.ajax({
           url: "./php/restCountries.php",
@@ -523,70 +516,194 @@ L.easyButton({
   }]
 }).addTo(map) 
 
-
-// Return Country Code
-$('#btnRun').click(function() {
-    //Country Code 
-    $('#country-code').html('<td>' + $('#selCountry').val() + '</td>');
-    
-// Info Modal  
-
-    $.ajax({
-        url: "./php/restCountries.php",
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            country: $('#selCountry').val()   
-        },
-        success: function(result) {
-          
-            console.log('restCountries', result);
-            if (result.status.name == "ok") {
-                currencyCode = result.currency.code;
-                currentCapital= result.capital;
-                var countryName2 = result.name;
-                countryName = countryName2.replace(/\s+/g, '_');
-                console.log(currentCapital);
-                
-                $('#country-capital').html('<td>' + result.capital + '</td>');
-                $('#country-population').html('<td>' + result.population.toLocaleString("en-US") + '</td>');
-                $('#country-currency').html('<td>' + result.currency.name + '</td>');
-                $('#country-language').html('<td>' + result.language.name + '</td>');
-                //Wiki link 
-                document.getElementById("myLink").href = "https://en.wikipedia.org/wiki/" + countryName;
-            }
-
-    //openWeather API          
-    $.ajax({
-        url: "./php/openWeather.php",
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            capital: currentCapital,
-        }, 
-        success: function(result) {
-            console.log('currentCapital', result);
-            capitalCityLat = result.weatherData.coord.lat;
-            capitalCityLon = result.weatherData.coord.lon;
+//COVID Modal
+L.easyButton({
+  id: "covid-button",
+  position: "topleft",
+  states: [{
+      stateName: "get-covid-info",
+      onClick: function() {
+        $("#covidModal").modal("show")
+        $.ajax({
+          url: "./php/covid.php",
+          type: 'POST',
+          dataType: 'json',
+          data: {
+              country: $('#selCountry').val(),
+          },
+          success: function(result) {
             
-            
-            if (result.status.name == "ok") {
-
-                $('#country-weather').html('<td id=weather>' + result.weatherData.weather[0].description + '</td>');
-            }
-        },
-
-        error: function(jqXHR, textStatus, errorThrown) {
+              console.log('covid data', result);
+              if (result.status.name == "ok") {
+                  /*currencyCode = result.currency.code;
+                  currentCapital= result.capital;
+                  var countryName2 = result.name;
+                  countryName = countryName2.replace(/\s+/g, '_');
+                  console.log(currentCapital);
+                  
+                  $('#country-capital').html('<td>' + result.capital + '</td>');
+                  $('#country-population').html('<td>' + result.population.toLocaleString("en-US") + '</td>');
+                  $('#country-currency').html('<td>' + result.currency.name + '</td>');
+                  $('#country-language').html('<td>' + result.language.name + '</td>');
+                  //Wiki link 
+                  document.getElementById("myLink").href = "https://en.wikipedia.org/wiki/" + countryName; */
+              }
+  
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            // your error code
+            console.log(textStatus, errorThrown);
             console.log(jqXHR.responseText);
-            console.log(errorThrown);
-        } 
-    })
-        },
-        
-        
-        
-    });
+          }
+          
+          
+      });
+      },
+      icon: "fa-virus"
+  }]
+}).addTo(map) 
 
-    
-        
-  });
+console.log($('#selCountry').val());
+console.log($(iso_a2));
+
+//Holiday Modal
+L.easyButton({
+  id: "holiday-button",
+  position: "topleft",
+  states: [{
+      stateName: "get-holiday-info",
+      onClick: function() {
+        $("#holidayModal").modal("show")
+        $.ajax({
+          url: "./php/holidays.php",
+          type: 'POST',
+          dataType: 'json',
+          data: {
+              country: $('#selCountry').val()  
+          },
+          success: function(result) {
+            
+              console.log('holiday data', result);
+              if (result.status.name == "ok") {
+                  /*currencyCode = result.currency.code;
+                  currentCapital= result.capital;
+                  var countryName2 = result.name;
+                  countryName = countryName2.replace(/\s+/g, '_');
+                  console.log(currentCapital);
+                  
+                  $('#country-capital').html('<td>' + result.capital + '</td>');
+                  $('#country-population').html('<td>' + result.population.toLocaleString("en-US") + '</td>');
+                  $('#country-currency').html('<td>' + result.currency.name + '</td>');
+                  $('#country-language').html('<td>' + result.language.name + '</td>');
+                  //Wiki link 
+                  document.getElementById("myLink").href = "https://en.wikipedia.org/wiki/" + countryName; */
+              }
+  
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            // your error code
+            console.log(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+          }
+          
+          
+      });
+      },
+      icon: "fa-gift"
+  }]
+}).addTo(map) 
+
+//News Modal
+L.easyButton({
+  id: "news-button",
+  position: "topleft",
+  states: [{
+      stateName: "get-news-info",
+      onClick: function() {
+        $("#newsModal").modal("show")
+        $.ajax({
+          url: "./php/news.php",
+          type: 'POST',
+          dataType: 'json',
+          data: {
+              country: $('#selCountry').val()  
+          },
+          success: function(result) {
+            
+              console.log('news data', result);
+              if (result.status.name == "ok") {
+                  /*currencyCode = result.currency.code;
+                  currentCapital= result.capital;
+                  var countryName2 = result.name;
+                  countryName = countryName2.replace(/\s+/g, '_');
+                  console.log(currentCapital);
+                  
+                  $('#country-capital').html('<td>' + result.capital + '</td>');
+                  $('#country-population').html('<td>' + result.population.toLocaleString("en-US") + '</td>');
+                  $('#country-currency').html('<td>' + result.currency.name + '</td>');
+                  $('#country-language').html('<td>' + result.language.name + '</td>');
+                  //Wiki link 
+                  document.getElementById("myLink").href = "https://en.wikipedia.org/wiki/" + countryName; */
+              }
+  
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            // your error code
+            console.log(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+          }
+          
+          
+      });
+      },
+      icon: "fa-newspaper"
+  }]
+}).addTo(map) 
+
+//Weather Modal
+L.easyButton({
+  id: "weather-button",
+  position: "topleft",
+  states: [{
+      stateName: "get-weather-info",
+      onClick: function() {
+        $("#weatherModal").modal("show")
+        $.ajax({
+          url: "./php/weather.php",
+          type: 'POST',
+          dataType: 'json',
+          data: {
+              lat: capitalLat,
+              lng: capitalLng
+          },
+          success: function(result) {
+            
+              console.log('weather data', result);
+              if (result.status.name == "ok") {
+                  /*currencyCode = result.currency.code;
+                  currentCapital= result.capital;
+                  var countryName2 = result.name;
+                  countryName = countryName2.replace(/\s+/g, '_');
+                  console.log(currentCapital);
+                  
+                  $('#country-capital').html('<td>' + result.capital + '</td>');
+                  $('#country-population').html('<td>' + result.population.toLocaleString("en-US") + '</td>');
+                  $('#country-currency').html('<td>' + result.currency.name + '</td>');
+                  $('#country-language').html('<td>' + result.language.name + '</td>');
+                  //Wiki link 
+                  document.getElementById("myLink").href = "https://en.wikipedia.org/wiki/" + countryName; */
+              }
+  
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            // your error code
+            console.log(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+          }
+          
+          
+      });
+      },
+      icon: "fas fa-cloud-sun"
+  }]
+}).addTo(map) 
