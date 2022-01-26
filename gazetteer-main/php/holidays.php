@@ -4,11 +4,10 @@ $url = "https://api.getfestivo.com/v2/holidays?country=".$_REQUEST['country']."&
 
 
 
-$ch = curl_init();
-
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL,$url);
+    $ch = curl_init();
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_URL,$url);
     
     $result=curl_exec($ch);
 
