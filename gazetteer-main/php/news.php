@@ -2,7 +2,6 @@
 $url = "https://newsapi.org/v2/top-headlines?country=".$_REQUEST['country']."&apiKey=3737404671214b30983c113c3ff22891"
 
 
-$ch = curl_init();
 
 $ch = curl_init();
 
