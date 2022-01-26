@@ -4,9 +4,9 @@ $url = "https://newsapi.org/v2/top-headlines?country=".$_REQUEST['country']."&ap
 
 
     $ch = curl_init();
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_URL,$url);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     
     $result=curl_exec($ch);
 
