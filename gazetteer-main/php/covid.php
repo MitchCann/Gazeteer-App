@@ -26,6 +26,11 @@ $covid = [];
 
     if($decode['Countries'][$i]["CountryCode"] === $_REQUEST['country']){
       array_push($covid,$decode['Countries'][$i]['TotalConfirmed']);
+      array_push($covid,$decode['Countries'][$i]['TotalDeaths']);
+      array_push($covid,$decode['Countries'][$i]['TotalRecovered']);
+      array_push($covid,$decode['Countries'][$i]['NewConfirmed']);
+      array_push($covid,$decode['Countries'][$i]['NewDeaths']);
+      array_push($covid,$decode['Countries'][$i]['NewRecovered']);
     }
 
     

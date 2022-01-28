@@ -592,18 +592,21 @@ L.easyButton({
             
               console.log('covid data', result);
               if (result.status.name == "ok") {
-                  /*currencyCode = result.currency.code;
-                  currentCapital= result.capital;
-                  var countryName2 = result.name;
-                  countryName = countryName2.replace(/\s+/g, '_');
-                  console.log(currentCapital);
-                  
-                  $('#country-capital').html('<td>' + result.capital + '</td>');
-                  $('#country-population').html('<td>' + result.population.toLocaleString("en-US") + '</td>');
-                  $('#country-currency').html('<td>' + result.currency.name + '</td>');
-                  $('#country-language').html('<td>' + result.language.name + '</td>');
-                  //Wiki link 
-                  document.getElementById("myLink").href = "https://en.wikipedia.org/wiki/" + countryName; */
+                  $('#total-cases').html('<td>' + result.data[0].toLocaleString("en-US") + '</td>');
+                  $('#total-deaths').html('<td>' + result.data[1].toLocaleString("en-US") + '</td>');
+
+                  if (result.data[2] === 0) {
+                    $('#total-recovered').html('<td><p>Data Not Published</p></td>');
+                  } else {
+                  $('#total-recovered').html('<td>' + result.data[2].toLocaleString("en-US") + '</td>');
+                  }
+                  $('#new-confirmed').html('<td>' + result.data[3].toLocaleString("en-US") + '</td>');
+                  $('#new-deaths').html('<td>' + result.data[4].toLocaleString("en-US") + '</td>');
+                  if (result.data[5] === 0) {
+                  $('#new-recovered').html('<td><p>Data Not Published</p></td>');
+                  } else {
+                    $('#new-recovered').html('<td>' + result.data[5].toLocaleString("en-US") + '</td>');
+                  }
               }
   
           },
