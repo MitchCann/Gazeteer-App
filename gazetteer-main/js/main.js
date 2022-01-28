@@ -1,6 +1,8 @@
 var currencyCode;
 var border;
 var countryName;
+var capitalCityLat;
+var capitalCityLon;
 let iso_a2;
 let visitedCountries = [];
 let popup;
@@ -46,7 +48,7 @@ var camMarker = L.ExtraMarkers.icon({
 
 var map = L.map('map', {
     zoom: 10,
-    maxZoom: 15,
+    maxZoom: 19,
 }).fitWorld();
 
 
@@ -55,7 +57,7 @@ var layerGroup = L.markerClusterGroup().addTo(map);
 
 var Stadia_Outdoors = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png', {
     maxZoom: 20,
-    attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+    attribution: '&copy; <a href="https://basemaps.cartocdn.com/">Base Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
 }).addTo(map);
 
 
@@ -75,6 +77,7 @@ $.ajax({
                         $('#selCountry').append($('<option>', {
                             value: result.data[i].code,
                             text: result.data[i].name,
+                            
                         }));
                     }
                 }
@@ -102,6 +105,7 @@ const successCallback = (position) => {
       },
 
       success: function(result) {
+        
           console.log('openCage PHP',result);
           currentLat = result.data[0].geometry.lat;
           currentLng = result.data[0].geometry.lng;
@@ -116,9 +120,13 @@ const successCallback = (position) => {
           console.log(textStatus, errorThrown);
           console.log(jqXHR.responseText);
       },
-
+      
      
   });
+
+  
+
+  
 
 }
 
@@ -227,7 +235,7 @@ $('#selCountry').on('change', function() {
               var newMarker = L.marker([city.lat, city.lng], {icon: marker, name: city.name, population: city.population, }).addTo(layerGroup).on('click', function(e) {
                 console.log("city clicked");
 
-                newMarker.bindPopup("<strong>" + city.name + "</strong>" + "<br>Population:"+ city.population +"<br><a href='https://en.wikipedia.org/wiki/" + city.name + "' target='_blank'>Wiki Link</a>").openPopup();
+                newMarker.bindPopup("<strong>" + city.name + "</strong>" + "<br>Population: "+ city.population.toLocaleString("en-US") +"<br><a href='https://en.wikipedia.org/wiki/" + city.name + "' target='_blank'>Wiki Link</a>").openPopup();
             });
               
             }
@@ -324,6 +332,8 @@ $('#selCountry').on('change', function() {
               })
        } });
 
+      
+
   //Home Default 
   const showFirstTab = function () {
          $('#nav-home-tab').tab('show');
@@ -361,7 +371,7 @@ $('#selCountry').on('change', function() {
         }; */
      
         border = L.geoJSON(countryArray[0], {
-                                                        color: 'lime',
+                                                        color: '#A7ABDD',
                                                         weight: 3,
                                                         opacity: 0.75
                                                         }).addTo(map);
@@ -384,6 +394,51 @@ $('#selCountry').on('change', function() {
       console.log(jqXHR.responseText);
     }
   }); 
+
+  $.ajax({
+    url: "./php/restCountries.php",
+    type: 'POST',
+    dataType: 'json',
+    data: {
+        country: $('#selCountry').val()   
+    },
+    success: function(result) {
+      
+        console.log('restCountries', result);
+        if (result.status.name == "ok") {
+            currencyCode = result.currency.code;
+            currentCapital= result.capital;
+            var countryName2 = result.name;
+            countryName = countryName2.replace(/\s+/g, '_');
+            console.log(currentCapital);
+        }
+
+//openWeather API          
+$.ajax({
+    url: "./php/openWeather.php",
+    type: 'POST',
+    dataType: 'json',
+    data: {
+        capital: currentCapital,
+    }, 
+    success: function(result) {
+        console.log('currentCapital', result);
+        capitalCityLat = result.weatherData.coord.lat;
+        capitalCityLon = result.weatherData.coord.lon;
+        if (result.status.name == "ok") {
+        }
+    },
+
+    error: function(jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR.responseText);
+        console.log(errorThrown);
+    } 
+})
+    },
+    
+    
+    
+});
 
   
 });
@@ -498,6 +553,8 @@ L.easyButton({
               if (result.status.name == "ok") {
   
                   $('#country-weather').html('<td id=weather>' + result.weatherData.weather[0].description + '</td>');
+                  $('#country-temperature').html('<td id=weather>' + result.weatherData.main.temp + '°C</td>');
+                  $('#feels-like').html('<td id=weather>' + result.weatherData.main.feels_like + '°C</td>');
               }
           },
   
@@ -563,8 +620,6 @@ L.easyButton({
   }]
 }).addTo(map) 
 
-console.log($('#selCountry').val());
-console.log($(iso_a2));
 
 //Holiday Modal
 L.easyButton({
@@ -585,18 +640,33 @@ L.easyButton({
             
               console.log('holiday data', result);
               if (result.status.name == "ok") {
-                  /*currencyCode = result.currency.code;
-                  currentCapital= result.capital;
-                  var countryName2 = result.name;
-                  countryName = countryName2.replace(/\s+/g, '_');
-                  console.log(currentCapital);
+                  $('#firstHolidayDate').html('<td>' + Date.parse(result.data.holidays[0].observed).toString().slice(4,10) + '</td>');
+                  $('#firstHoliday').html('<td>' + result.data.holidays[0].name + '</td>');
+                  $('#secondHolidayDate').html('<td>' + Date.parse(result.data.holidays[1].observed).toString().slice(4,10) + '</td>');
+                  $('#secondHoliday').html('<td>' + result.data.holidays[1].name + '</td>');
+                  $('#thirdHolidayDate').html('<td>' + Date.parse(result.data.holidays[2].observed).toString().slice(4,10) + '</td>');
+                  $('#thirdHoliday').html('<td>' + result.data.holidays[2].name + '</td>');
+                  $('#fourthHolidayDate').html('<td>' + Date.parse(result.data.holidays[3].observed).toString().slice(4,10) + '</td>');
+                  $('#fourthHoliday').html('<td>' + result.data.holidays[3].name + '</td>');
+                  $('#fifthHolidayDate').html('<td>' + Date.parse(result.data.holidays[4].observed).toString().slice(4,10) + '</td>');
+                  $('#fifthHoliday').html('<td>' + result.data.holidays[4].name + '</td>');
+                  $('#sixthHolidayDate').html('<td>' + Date.parse(result.data.holidays[5].observed).toString().slice(4,10) + '</td>');
+                  $('#sixthHoliday').html('<td>' + result.data.holidays[5].name + '</td>');
+                  $('#seventhHolidayDate').html('<td>' + Date.parse(result.data.holidays[6].observed).toString().slice(4,10) + '</td>');
+                  $('#seventhHoliday').html('<td>' + result.data.holidays[6].name + '</td>');
+                  $('#eigthHolidayDate').html('<td>' + Date.parse(result.data.holidays[7].observed).toString().slice(4,10) + '</td>');
+                  $('#eigthHoliday').html('<td>' + result.data.holidays[7].name + '</td>');
+                  $('#ninthHolidayDate').html('<td>' + Date.parse(result.data.holidays[8].observed).toString().slice(4,10) + '</td>');
+                  $('#ninthHoliday').html('<td>' + result.data.holidays[8].name + '</td>');
+                  $('#tenthHolidayDate').html('<td>' + Date.parse(result.data.holidays[9].observed).toString().slice(4,10) + '</td>');
+                  $('#tenthHoliday').html('<td>' + result.data.holidays[9].name + '</td>');
+                  $('#eleventhHolidayDate').html('<td>' + Date.parse(result.data.holidays[10].observed).toString().slice(4,10) + '</td>');
+                  $('#eleventhHoliday').html('<td>' + result.data.holidays[10].name + '</td>');
+                  $('#twelfthHolidayDate').html('<td>' + Date.parse(result.data.holidays[11].observed).toString().slice(4,10) + '</td>');
+                  $('#twelfthHoliday').html('<td>' + result.data.holidays[11].name + '</td>');
                   
-                  $('#country-capital').html('<td>' + result.capital + '</td>');
-                  $('#country-population').html('<td>' + result.population.toLocaleString("en-US") + '</td>');
-                  $('#country-currency').html('<td>' + result.currency.name + '</td>');
-                  $('#country-language').html('<td>' + result.language.name + '</td>');
                   //Wiki link 
-                  document.getElementById("myLink").href = "https://en.wikipedia.org/wiki/" + countryName; */
+                  document.getElementById("myLink").href = "https://en.wikipedia.org/wiki/" + countryName; 
               }
   
           },
@@ -612,6 +682,8 @@ L.easyButton({
       icon: "fa-gift"
   }]
 }).addTo(map) 
+
+
 
 //News Modal
 L.easyButton({
@@ -660,6 +732,9 @@ L.easyButton({
   }]
 }).addTo(map) 
 
+
+console.log("console log check", capitalLat,);
+
 //Weather Modal
 L.easyButton({
   id: "weather-button",
@@ -670,6 +745,42 @@ L.easyButton({
         $("#weatherModal").modal("show")
         $.ajax({
           url: "./php/weather.php",
+          type: 'POST',
+          dataType: 'json',
+          data: {
+              lat: capitalCityLat,
+              lng: capitalCityLon,
+          },
+          success: function(result) {            
+              console.log('weather data', result);
+              if (result.status.name == "ok") {
+         
+              }
+  
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            // your error code
+            console.log(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+          }
+          
+          
+      });
+      },
+      icon: "fas fa-cloud-sun"
+  }]
+}).addTo(map) 
+
+//Video Modal
+L.easyButton({
+  id: "video-button",
+  position: "topleft",
+  states: [{
+      stateName: "get-video-info",
+      onClick: function() {
+        $("#videoModal").modal("show")
+        $.ajax({
+          url: "./php/video.php",
           type: 'POST',
           dataType: 'json',
           data: {
@@ -704,6 +815,6 @@ L.easyButton({
           
       });
       },
-      icon: "fas fa-cloud-sun"
+      icon: "fab fa-video"
   }]
 }).addTo(map) 
