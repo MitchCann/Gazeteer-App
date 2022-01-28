@@ -589,7 +589,7 @@ L.easyButton({
               country: $('#selCountry').val(),
           },
           success: function(result) {
-            
+            $('#modal-body').html('<div class="preloader"> <img class="preloader-icon" src="img/Ripple-loader.gif" alt="My Site Preloader"/> </div>')
               console.log('covid data', result);
               if (result.status.name == "ok") {
                   $('#total-cases').html('<td>' + result.data[0].toLocaleString("en-US") + '</td>');
@@ -607,6 +607,8 @@ L.easyButton({
                   } else {
                     $('#new-recovered').html('<td>' + result.data[5].toLocaleString("en-US") + '</td>');
                   }
+                  $(".preloader").hide(); 
+            
               }
   
           },
