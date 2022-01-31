@@ -160,6 +160,18 @@ h3 {
   color: #90278e;
 }
 
+#news-body {
+  padding:0;
+  max-height:75vh;
+  overflow:auto;
+  display:inline-block
+}
+
+.no-news {
+  text-align:center;
+  padding:1rem
+}
+
 #weatherModal .modal-content {
   color:#fff
 }

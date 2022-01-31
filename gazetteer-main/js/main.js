@@ -697,6 +697,7 @@ L.easyButton({
   states: [{
       stateName: "get-news-info",
       onClick: function() {
+        $("#news-body").empty(),
         $("#newsModal").modal("show")
         $.ajax({
           url: "./php/news.php",
@@ -709,18 +710,13 @@ L.easyButton({
             
               console.log('news data', result);
               if (result.status.name == "ok") {
-                  /*currencyCode = result.currency.code;
-                  currentCapital= result.capital;
-                  var countryName2 = result.name;
-                  countryName = countryName2.replace(/\s+/g, '_');
-                  console.log(currentCapital);
-                  
-                  $('#country-capital').html('<td>' + result.capital + '</td>');
-                  $('#country-population').html('<td>' + result.population.toLocaleString("en-US") + '</td>');
-                  $('#country-currency').html('<td>' + result.currency.name + '</td>');
-                  $('#country-language').html('<td>' + result.language.name + '</td>');
-                  //Wiki link 
-                  document.getElementById("myLink").href = "https://en.wikipedia.org/wiki/" + countryName; */
+                  if (result.data.totalResults === 0) {
+                    $("#news-body").append('\n          <article class="no-news">\n            <h4>Sorry, No news is yet available for this country currently</h4>\n          </article>\n        ');
+                  }
+              } else {
+                for (let step = 0; step < 5; step++) {
+                  console.log('Walking east one step')
+                }
               }
   
           },
@@ -738,7 +734,6 @@ L.easyButton({
 }).addTo(map) 
 
 
-console.log("console log check", capitalLat,);
 
 //Weather Modal
 L.easyButton({
