@@ -22,7 +22,11 @@
 	$output['capital'] = $decode["capital"];
 	$output['population'] = $decode["population"];
 	$output['language'] = $decode["languages"][0];
-	$output['name'] = $decode["name"][0];
+	$output['name'] = $decode["name"];
+	$output['callingCodes'] = $decode["callingCodes"][0];
+
+	
+	
 	
 
 	header('Content-Type: application/json; charset=UTF-8');

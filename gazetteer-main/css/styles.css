@@ -60,6 +60,14 @@ animation: shake 1.5s infinite;
   pointer-events: auto;   
 }
 
+* {
+  font-weight: 300;
+}
+
+h1,h2,h3,h4,h5 {
+  font-weight: 300;
+} 
+
 
 h3 {
   padding-left: 1rem;
@@ -95,6 +103,10 @@ h3 {
   color: red;
 }
 
+#flag-button {
+  color: #aeb6df
+}
+
 #exampleModal .modal-header {
   background-color: #1b75bb;
   color: #fff;
@@ -128,6 +140,31 @@ h3 {
   color:#1b75bb;
 }
 
+#flag {
+  text-align: center;
+  
+}
+
+#flag-img {
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+
+.title {
+  font-weight: bold !important;
+}
+
+.wiki-icon {
+  height: 3rem!important;
+  width: 3rem!important;
+  border:3px solid #b2bae1!important;
+  border-radius: 10px!important;
+  padding: 0.5rem!important;
+  color: #00f!important;
+  margin-top: 0.1rem!important;
+  background-color: #e1e1e1;
+}
+
 #holidayModal .modal-header {
   background-color: #a23337;
   color: #fff;
@@ -142,6 +179,10 @@ h3 {
   height:3rem;
   margin-top:1.5rem;
   color: #a23337;
+}
+
+#holiday-body {
+  text-align: center;
 }
 
 #newsModal .modal-header {
@@ -172,12 +213,20 @@ h3 {
   padding:1rem
 }
 
+.news-card {
+  border:2px solid #fff
+}
+
+h5.card-title {
+  font-weight: 400;
+}
+
 #weatherModal .modal-content {
   color:#fff
 }
 
 #weatherModal .modal-footer,#weather-modal .modal-header {
-  background-color:#f2f2f2
+  background-color:#f0cb3e
 }
 
 .modal-header {
@@ -185,7 +234,8 @@ h3 {
 }
 #weatherModal .modal-body {
   background-color:white;
-  color:#404040
+  color:#404040;
+  text-align: center;
 }
 
 .todays-weather-container {
@@ -221,12 +271,18 @@ h3 {
   padding:0
 }
 
+#today-weather-type {
+  text-transform: capitalize;
+}
+
 .forecast-container {
-  display:flex;
+  text-align: center;
   justify-content:center;
   width:25%;
   border-right:1px solid #fff;
-  padding-right:.2em
+  padding-right:.2em;
+  background-color: #f0cb3e;
+  
 }
 
 .forecast-container:last-child {
@@ -255,19 +311,20 @@ h3 {
   margin-bottom:.5rem
 }
 
+#videoModal .modal-body {
+  text-align: center;
+}
 
-/*.test {
-  height: fit-content;
-  width: fit-content;
-  position: absolute;
-  float: top;
-  z-index: 2;
-  margin-left: 40%;
-  margin-top: 5px;
-  
-  
-  pointer-events: auto;  
-} */
+#my-iframe {
+  width: 100%;
+  height: 22rem;
+}
+
+#flagModal .modal-header {
+  background-color: #aeb6df;
+  color: #fff;
+}
+
 
 .test {
   position:absolute;
@@ -278,12 +335,6 @@ h3 {
   z-index:999
 }
 
-
-
-/* .leaflet-control-zoom {
-  position: absolute; 
-  
-} */
 
 /* Modal */
 
@@ -316,12 +367,6 @@ h3 {
 
 
 
-/* .div.leaflet-bar.easy-button-container.leaflet-control {
-  margin-top: 150px !important;
-} */
-
-
-
 .nav-link {
   color: blueviolet;
 }
@@ -335,10 +380,12 @@ h3 {
   pointer-events: auto;
   background-color: #fff;
   background-clip: padding-box;
-  
   border-radius: 0.3rem;
   outline: 0;
 }
+ .modal-content {
+  border: 0px solid rgba(0,0,0,.2) !important;
+ }
 
 .btn-secondary {
   color: rgb(0, 0, 0);
@@ -372,6 +419,10 @@ h3 {
   text-align: center;
 } 
 
-/* .leaflet-top .leaflet-control {
-  margin-top: 50px;
-} */
+.leaflet-popup-content-wrapper {
+  background: white;
+  color: #333;
+  box-shadow: 0 3px 14px rgb(0 0 0 / 40%);
+  border: 2px solid #b3bbe0;
+} 
+

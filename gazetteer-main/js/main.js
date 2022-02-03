@@ -18,6 +18,8 @@ let north;
 let south;
 let east; 
 let west;
+var countryName2;
+
 
 
 var redMarker = L.ExtraMarkers.icon({
@@ -59,6 +61,7 @@ var Stadia_Outdoors = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles
     maxZoom: 20,
     attribution: '&copy; <a href="https://basemaps.cartocdn.com/">Base Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
 }).addTo(map);
+
 
 
 // Market Cluster
@@ -114,6 +117,7 @@ const successCallback = (position) => {
           
           let currentCountry = result.data[0].components["ISO_3166-1_alpha-2"];
           $("#selCountry").val(currentCountry).change();
+          
       
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -172,7 +176,7 @@ $('#selCountry').on('change', function() {
                 longitude: webcams.location.longitude,
               }).addTo(layerGroup).on('click', function(e) {
                 console.log("clicked webcam");
-                newMarker.bindPopup("<strong>" + webcams.title + "</strong><br><br><iframe width='220' height='245' src='" + webcams.player.day.embed +"'></iframe>").openPopup();
+                newMarker.bindPopup("<strong class='title'>Webcam</strong><hr>"+ webcams.title + "<br><br><iframe width='220' height='245' src='" + webcams.player.day.embed +"'></iframe>").openPopup();
             });
              
             
@@ -228,15 +232,16 @@ $('#selCountry').on('change', function() {
                 geonameId: city.geonameId,
               }).addTo(layerGroup).on('click', function(e) {
                 console.log("click click");
-                newMarker.bindPopup("<strong>" + city.name + "</strong>" + "<br>(Capital City)" +"<br><a href='https://en.wikipedia.org/wiki/" + result.capital + "' target='_blank'>Wiki Link</a>").openPopup();
+                newMarker.bindPopup("<strong  class='title' >" + city.name + "</strong>" + "<br>(Capital City)" +"<br><a href='https://en.wikipedia.org/wiki/" + result.capital + "' target='_blank' ><img class='wiki-icon' src='img/wiki1.svg' alt='Wiki Link'></a>").openPopup();
             });
              
             } else {
               var newMarker = L.marker([city.lat, city.lng], {icon: marker, name: city.name, population: city.population, }).addTo(layerGroup).on('click', function(e) {
                 console.log("city clicked");
 
-                newMarker.bindPopup("<strong>" + city.name + "</strong>" + "<br>Population: "+ city.population.toLocaleString("en-US") +"<br><a href='https://en.wikipedia.org/wiki/" + city.name + "' target='_blank'>Wiki Link</a>").openPopup();
-            });
+                newMarker.bindPopup("<strong class ='title'>" + city.name + "</strong>" + "<br>Population: "+ city.population.toLocaleString("en-US") +"<br><a href='https://en.wikipedia.org/wiki/" + city.name + "' target='_blank' style='font-weight=300;'><img class='wiki-icon' src='img/wiki1.svg' alt='Wiki Link'> </a>").openPopup();
+                
+              });
               
             }
           });
@@ -277,7 +282,7 @@ $('#selCountry').on('change', function() {
             type: 'monument',
           }).addTo(layerGroup).on('click', function(e) {
             console.log("click POI");
-            newMarker.bindPopup("<strong>" + poi.name + "</strong>" + "<br>Point of Interest" +"<br><a href='https://en.wikipedia.org/wiki/" + poi.name + "' target='_blank'>Wiki Link</a>").openPopup();
+            newMarker.bindPopup("<strong class='title'>Point of Interest" + "</strong><br><strong>" + poi.name + "</strong>" + "<br><a href='https://en.wikipedia.org/wiki/" + poi.name + "' target='_blank'><img class='wiki-icon' src='img/wiki1.svg' alt='Wiki Link'></a>").openPopup();
         });
         });
         
@@ -323,7 +328,7 @@ $('#selCountry').on('change', function() {
                       type: 'quake',
                     }).addTo(layerGroup).on('click', function(e) {
                       console.log("click quake");
-                      newerMarker.bindPopup("<strong>Earthquake</strong><br>Magnitude:" + quake.magnitude + "<br>Happened Here:" +"<br>" + quake.datetime).openPopup();
+                      newerMarker.bindPopup("<strong class='title'>Earthquake</strong><br>Magnitude:" + quake.magnitude + "<br>Happened Here:" +"<br>" + quake.datetime).openPopup();
                   });
                   });
                   
@@ -381,9 +386,10 @@ $('#selCountry').on('change', function() {
             duration: 2,
             });      
             
-            //Preloader
-    $(".preloader").hide(); 
-    },
+            
+    
+  
+  },
 
 
 
@@ -439,7 +445,9 @@ $.ajax({
     
     
 });
-
+  
+//Preloader
+$(".preloader").hide();
   
 });
 
@@ -519,6 +527,8 @@ L.easyButton({
               country: $('#selCountry').val()   
           },
           success: function(result) {
+
+            
             
               console.log('restCountries', result);
               if (result.status.name == "ok") {
@@ -527,13 +537,43 @@ L.easyButton({
                   var countryName2 = result.name;
                   countryName = countryName2.replace(/\s+/g, '_');
                   console.log(currentCapital);
+                  console.log(countryName2);
                   
                   $('#country-capital').html('<td>' + result.capital + '</td>');
                   $('#country-population').html('<td>' + result.population.toLocaleString("en-US") + '</td>');
                   $('#country-currency').html('<td>' + result.currency.name + '</td>');
+                  $('#currency-code').html('<td>' + result.currency.code + '</td>');
+                  $('#currency-symbol').html('<td>' + result.currency.symbol + '</td>');
                   $('#country-language').html('<td>' + result.language.name + '</td>');
+                  $('#calling-codes').html('<td>+' + result.callingCodes + '</td>');
                   //Wiki link 
                   document.getElementById("myLink").href = "https://en.wikipedia.org/wiki/" + countryName;
+
+                  if (countryName2 === `United Kingdom of Great Britain and Northern Ireland` ) {
+                      countryName2 = 'UK'
+                  };
+                
+                  const doSearch = () => {
+                    let searchQuery = countryName2 + 'Travel Top Ten';
+                    let url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&key=AIzaSyDbPG_mru-trAvVr0eqngkVYBJVko3HmJY&q=' + searchQuery;
+                      
+                    $.ajax({
+                      url: url,
+                      method: 'GET',
+                      success: (result) => {
+                        $('#video-body').text('');
+                        $('#video-body').append(`<iframe id="my-iframe" src=https://www.youtube.com/embed/${result.items[0].id.videoId} allowFullScreen title='youtube player' />`)
+                       
+                      },
+                      error: (err, response) => {
+                        console.log(err.responseText);
+                        $('#video-body').text(err.responseText);
+                      }
+                    })
+                  };
+                
+                  doSearch();
+
               }
   
       //openWeather API          
@@ -555,6 +595,8 @@ L.easyButton({
                   $('#country-weather').html('<td id=weather>' + result.weatherData.weather[0].description + '</td>');
                   $('#country-temperature').html('<td id=weather>' + result.weatherData.main.temp + '°C</td>');
                   $('#feels-like').html('<td id=weather>' + result.weatherData.main.feels_like + '°C</td>');
+                
+                  $("#today-weather-type").html(result.weatherData.weather[0].description + '<hr> <p>Current Temp: ' + result.weatherData.main.temp + '°C </p> <p>Feels Like: ' +result.weatherData.main.feels_like + '°C </p>')
               }
           },
   
@@ -633,6 +675,9 @@ L.easyButton({
   states: [{
       stateName: "get-holiday-info",
       onClick: function() {
+        $("#holiday-body").empty(),
+          
+        
         $("#holidayModal").modal("show")
         $.ajax({
           url: "./php/holidays.php",
@@ -645,33 +690,16 @@ L.easyButton({
             
               console.log('holiday data', result);
               if (result.status.name == "ok") {
-                  $('#firstHolidayDate').html('<td>' + Date.parse(result.data.holidays[0].observed).toString().slice(4,10) + '</td>');
-                  $('#firstHoliday').html('<td>' + result.data.holidays[0].name + '</td>');
-                  $('#secondHolidayDate').html('<td>' + Date.parse(result.data.holidays[1].observed).toString().slice(4,10) + '</td>');
-                  $('#secondHoliday').html('<td>' + result.data.holidays[1].name + '</td>');
-                  $('#thirdHolidayDate').html('<td>' + Date.parse(result.data.holidays[2].observed).toString().slice(4,10) + '</td>');
-                  $('#thirdHoliday').html('<td>' + result.data.holidays[2].name + '</td>');
-                  $('#fourthHolidayDate').html('<td>' + Date.parse(result.data.holidays[3].observed).toString().slice(4,10) + '</td>');
-                  $('#fourthHoliday').html('<td>' + result.data.holidays[3].name + '</td>');
-                  $('#fifthHolidayDate').html('<td>' + Date.parse(result.data.holidays[4].observed).toString().slice(4,10) + '</td>');
-                  $('#fifthHoliday').html('<td>' + result.data.holidays[4].name + '</td>');
-                  $('#sixthHolidayDate').html('<td>' + Date.parse(result.data.holidays[5].observed).toString().slice(4,10) + '</td>');
-                  $('#sixthHoliday').html('<td>' + result.data.holidays[5].name + '</td>');
-                  $('#seventhHolidayDate').html('<td>' + Date.parse(result.data.holidays[6].observed).toString().slice(4,10) + '</td>');
-                  $('#seventhHoliday').html('<td>' + result.data.holidays[6].name + '</td>');
-                  $('#eigthHolidayDate').html('<td>' + Date.parse(result.data.holidays[7].observed).toString().slice(4,10) + '</td>');
-                  $('#eigthHoliday').html('<td>' + result.data.holidays[7].name + '</td>');
-                  $('#ninthHolidayDate').html('<td>' + Date.parse(result.data.holidays[8].observed).toString().slice(4,10) + '</td>');
-                  $('#ninthHoliday').html('<td>' + result.data.holidays[8].name + '</td>');
-                  $('#tenthHolidayDate').html('<td>' + Date.parse(result.data.holidays[9].observed).toString().slice(4,10) + '</td>');
-                  $('#tenthHoliday').html('<td>' + result.data.holidays[9].name + '</td>');
-                  $('#eleventhHolidayDate').html('<td>' + Date.parse(result.data.holidays[10].observed).toString().slice(4,10) + '</td>');
-                  $('#eleventhHoliday').html('<td>' + result.data.holidays[10].name + '</td>');
-                  $('#twelfthHolidayDate').html('<td>' + Date.parse(result.data.holidays[11].observed).toString().slice(4,10) + '</td>');
-                  $('#twelfthHoliday').html('<td>' + result.data.holidays[11].name + '</td>');
-                  
-                  //Wiki link 
-                  document.getElementById("myLink").href = "https://en.wikipedia.org/wiki/" + countryName; 
+
+                if (result.data.totalResults === 0) {
+                  $("#holiday-body").append('\n<article class="no-news">\n<h4>Sorry, no news is available for this country currently.</h4>\n</article>\n');
+                }
+                else {
+                  for (let i = 0; i < 20; i++) {
+                    $("#holiday-body").append(`<tr><td>` + Date.parse(result.data.holidays[i].observed).toString().slice(4,10) + `</td><td>` + result.data.holidays[i].name + `</td></tr>`);
+                  }
+            } 
+                 
               }
   
           },
@@ -711,12 +739,13 @@ L.easyButton({
               console.log('news data', result);
               if (result.status.name == "ok") {
                   if (result.data.totalResults === 0) {
-                    $("#news-body").append('\n          <article class="no-news">\n            <h4>Sorry, No news is yet available for this country currently</h4>\n          </article>\n        ');
+                    $("#news-body").append('\n<article class="no-news">\n<h4>Sorry, no news is available for this country currently.</h4>\n</article>\n');
                   }
-              } else {
-                for (let step = 0; step < 5; step++) {
-                  console.log('Walking east one step')
-                }
+                  else {
+                    for (let i = 0; i < 10; i++) {
+                      $("#news-body").append(`\n<div class="card news-card">\n<img class="card-img-top news-img" src=` + result.data.articles[i].urlToImage + `alt="article image">\n<div class="card-body">\n<h5 class="card-title">` + result.data.articles[i].title +`</h5>\n<p class="card-text">`+ result.data.articles[i].description + `</p>\n<a href=` + result.data.articles[i].url + `target="_blank" class="card-link">Read More</a>\n</div>\n</div>\n`);
+                    }
+              } 
               }
   
           },
@@ -754,8 +783,26 @@ L.easyButton({
           success: function(result) {            
               console.log('weather data', result);
               if (result.status.name == "ok") {
-         
-              }
+                
+                $("#today-weather-icon").attr("src", `http://openweathermap.org/img/w/`+ result.weatherForcast.daily[1].weather[0].icon +`.png`),
+                $("#plus-one-date").html('Tomorrow'),
+                $("#plus-one-weather-icon").attr("src", `http://openweathermap.org/img/w/`+ result.weatherForcast.daily[2].weather[0].icon +`.png`),
+                $("#plus-one-max-temp").html('Max Temp:<br>' + result.weatherForcast.daily[1].temp.max + '°C'),
+                $("#plus-one-min-temp").html('Min Temp:<br>' +result.weatherForcast.daily[1].temp.min + '°C'),
+                $("#plus-two-date").html('Third Day'),
+                $("#plus-two-weather-icon").attr("src", `http://openweathermap.org/img/w/`+ result.weatherForcast.daily[3].weather[0].icon+`.png`),
+                $("#plus-two-max-temp").html('Max Temp:<br>' + result.weatherForcast.daily[2].temp.max + '°C'),
+                $("#plus-two-min-temp").html('Min Temp:<br>' +result.weatherForcast.daily[2].temp.min + '°C'),
+                $("#plus-three-date").html('Fourth Day'),
+                $("#plus-three-weather-icon").attr("src", `http://openweathermap.org/img/w/`+ result.weatherForcast.daily[4].weather[0].icon +`.png`),
+                $("#plus-three-max-temp").html('Max Temp:<br>' + result.weatherForcast.daily[3].temp.max + '°C'),
+                $("#plus-three-min-temp").html('Min Temp:<br>' +result.weatherForcast.daily[3].temp.min + '°C'),
+                $("#plus-four-date").html('Fifth Day'),
+                $("#plus-four-weather-icon").attr("src", `http://openweathermap.org/img/w/`+ result.weatherForcast.daily[5].weather[0].icon +`.png`),
+                $("#plus-four-max-temp").html('Max Temp:<br>' + result.weatherForcast.daily[4].temp.max + '°C'),
+                $("#plus-four-min-temp").html('Min Temp:<br>' +result.weatherForcast.daily[4].temp.min + '°C') 
+             
+          }
   
           },
           error: function(jqXHR, textStatus, errorThrown) {
@@ -771,6 +818,8 @@ L.easyButton({
   }]
 }).addTo(map) 
 
+console.log(countryName2);
+
 //Video Modal
 L.easyButton({
   id: "video-button",
@@ -778,43 +827,31 @@ L.easyButton({
   states: [{
       stateName: "get-video-info",
       onClick: function() {
+        
+        //$("#video-body").empty(),
         $("#videoModal").modal("show")
-        $.ajax({
-          url: "./php/video.php",
-          type: 'POST',
-          dataType: 'json',
-          data: {
-              lat: capitalLat,
-              lng: capitalLng
-          },
-          success: function(result) {
-            
-              console.log('weather data', result);
-              if (result.status.name == "ok") {
-                  /*currencyCode = result.currency.code;
-                  currentCapital= result.capital;
-                  var countryName2 = result.name;
-                  countryName = countryName2.replace(/\s+/g, '_');
-                  console.log(currentCapital);
-                  
-                  $('#country-capital').html('<td>' + result.capital + '</td>');
-                  $('#country-population').html('<td>' + result.population.toLocaleString("en-US") + '</td>');
-                  $('#country-currency').html('<td>' + result.currency.name + '</td>');
-                  $('#country-language').html('<td>' + result.language.name + '</td>');
-                  //Wiki link 
-                  document.getElementById("myLink").href = "https://en.wikipedia.org/wiki/" + countryName; */
-              }
-  
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-            // your error code
-            console.log(textStatus, errorThrown);
-            console.log(jqXHR.responseText);
-          }
-          
-          
-      });
+        console.log(countryName2);
       },
-      icon: "fab fa-video"
+      icon: "fab fa-youtube"
   }]
 }).addTo(map) 
+
+$('#videoModal').on('hidden.bs.modal', function () {
+  $("#video-body").empty()
+})
+
+//Flag Modal
+L.easyButton({
+  id: "flag-button",
+  position: "topleft",
+  states: [{
+      stateName: "get-flag-info",
+      onClick: function() {
+        $("#flag-body").empty(),
+        $("#flagModal").modal("show")
+       $("#flag-body").append(`<img src="./img/flags/`+ $('#selCountry').val() + `.svg"width="100%"alt="South Africa">`);
+      },
+      icon: "fas fa-flag"
+  }] 
+}).addTo(map) 
+

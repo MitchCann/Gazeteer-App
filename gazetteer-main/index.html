@@ -76,8 +76,8 @@ aria-hidden="true"
           <!-- Info 2 -->
           <tr>
             <td rowspan='3' class='info-icon'><i class="far fa-question-circle"></i></td>
-            <td>Currency:</td>
-            <td id='country-currency'></td>
+            <td>Dialling Code:</td>
+            <td id="calling-codes"></td>
           </tr>
           <tr>
             <td>Language:</td>
@@ -88,19 +88,19 @@ aria-hidden="true"
             <td id="country-wikipedia"><a href="https://en.wikipedia.org/wiki/Earth" target="_blank" id="myLink">Click Here!</a></td>
           </tr>
           <!-- Info 3 -->
-          <tr>
-            <td rowspan='3' class='info-icon'><i class="fas fa-cloud-sun-rain"></i></td>
-            <td>Capital Weather:</td>
-            <td id="country-weather"></td>
+           <tr>
+            <td rowspan='3' class='info-icon'><i class="fas fa-pound-sign"></i></td>
+            <td>Currency Name:</td>
+            <td id='country-currency'></td>
           </tr>
           <tr>
-            <td>Capital Temperature:</td>
-            <td id='country-temperature'></td>
+            <td>Currency Symbol:</td>
+            <td id='currency-symbol'></td>
           </tr>
           <tr>
-            <td>Feels Like:</td>
-            <td id='feels-like'></td>
-          </tr>
+            <td>Currency Code:</td>
+            <td id='currency-code'></td>
+          </tr>  
         </tbody>
       </table>
     </div>
@@ -174,10 +174,10 @@ aria-hidden="true"
       <h1>Public Holidays</h1>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
-    <div class="modal-body">
-      <table id='covid-table' class='table table-striped table-hover'>
-        <tbody>
-          <!-- Info 1 -->
+    <div class="covid-body">
+      <table id='holiday-table' class='table table-striped table-hover'>
+        <tbody id="holiday-body">
+           <!--Info 1 
           <tr>
             <td rowspan='3' class='holiday-icon'><i class="fas fa-seedling"></i></td>
             <td id="firstHolidayDate"></td>
@@ -191,7 +191,7 @@ aria-hidden="true"
             <td id="thirdHolidayDate"></td>
             <td id="thirdHoliday"></td>
           </tr>
-          <!-- Info 2 -->
+         
           <tr>
             <td rowspan='3' class='holiday-icon'><i class="fas fa-sun"></i></td>
             <td id="fourthHolidayDate"></td>
@@ -205,7 +205,7 @@ aria-hidden="true"
             <td id="sixthHolidayDate"></td>
             <td id="sixthHoliday"></td>
           </tr>
-          <!-- Info 3 -->
+          
           <tr>
             <td rowspan='3' class='holiday-icon'><i class="fab fa-canadian-maple-leaf"></i></td>
             <td id="seventhHolidayDate"></td>
@@ -219,7 +219,7 @@ aria-hidden="true"
             <td id="ninthHolidayDate"></td>
             <td id="ninthHoliday"></td>
           </tr>
-          <!-- Info 4 -->
+         Info 4
           <tr>
             <td rowspan='3' class='holiday-icon'><i class="fas fa-snowflake"></i></td>
             <td id="tenthHolidayDate"></td>
@@ -232,13 +232,13 @@ aria-hidden="true"
           <tr>
             <td id="twelfthHolidayDate"></td>
             <td id="twelfthHoliday"></td>
-          </tr>
+          </tr> -->
         </tbody>
-      </table>
+      </table> 
     </div>
   </div>
 </div>
-</div>
+</div> 
 
   <!-- News Modal -->
   <div
@@ -285,8 +285,7 @@ aria-hidden="true"
              <img id="today-weather-icon" alt="weather icon" />
            </div>
            <div class='today-weather-two'>
-             <p id="today-humidity">32deg</p>
-             <p id="today-max-temp">25deg</p>
+            
            </div>
            <div class='today-weather-three'>
              <h3 id="today-weather-type">Rain</h3>
@@ -301,8 +300,8 @@ aria-hidden="true"
                <img id="plus-one-weather-icon" alt="weather icon" />
              </div>
              <div class='forecast-two'>
-               <p id='plus-one-humidity'></p>
                <p id='plus-one-max-temp'></p>
+               <p id='plus-one-min-temp'></p>
              </div>
            </div>
            <!-- DAY AFTER TOMORROW'S WEATHER -->
@@ -312,8 +311,9 @@ aria-hidden="true"
                <img id="plus-two-weather-icon" alt="weather icon" />
              </div>
              <div class='forecast-two'>
-               <p id='plus-two-humidity'></p>
+               
                <p id='plus-two-max-temp'></p>
+               <p id='plus-two-min-temp'></p>
              </div>
            </div>
            <!-- WEATHER IN 3 DAYS -->
@@ -323,8 +323,9 @@ aria-hidden="true"
                <img id="plus-three-weather-icon" alt="weather icon" />
              </div>
              <div class='forecast-two'>
-               <p id='plus-three-humidity'></p>
+               
                <p id='plus-three-max-temp'></p>
+               <p id='plus-three-min-temp'></p>
              </div>
            </div>
            <!-- WEATHER IN 4 DAYS -->
@@ -334,8 +335,9 @@ aria-hidden="true"
                <img id="plus-four-weather-icon" alt="weather icon" />
              </div>
              <div class='forecast-two'>
-               <p id='plus-four-humidity'></p>
+              
                <p id='plus-four-max-temp'></p>
+               <p id='plus-four-min-temp'></p>
              </div>
            </div>
          </div>
@@ -343,52 +345,45 @@ aria-hidden="true"
      </div>
    </div>
 
-  <!-- Video Modal -->
-<div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><span id="txtName">Country Video</span></h5>
-        <button type="button" id="btnClose" class="btn btn-secondary" data-bs-dismiss="modal"><strong>X</strong></button>
+    <!-- Video Modal -->
+   <div
+   class="modal fade"
+   id="videoModal"
+   tabindex="-1"
+   aria-labelledby="video news"
+   aria-hidden="true"
+ >
+   <div class="modal-dialog">
+     <div class="modal-content">
+       <div class="modal-header">
+         <h1>Country Travel Video</h1>
+         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+       </div>
+       <div id="video-body" class="modal-body"></div>
+       <div class="suggest-list">
       </div>
-      <div class="modal-body">
-        <table class="table table-striped table-hover" id="bootstrap-overide">
-          <tbody><tr>
-            <th>Country Code</th>
-            <td id="country-code"></td>
-          </tr>
-          <tr>
-            <th>Capital City</th>
-            <td id="country-capital"></td>
-          </tr>
-          <tr>
-            <th>Population</th>
-            <td id="country-population"></td>
-          </tr>
-          <tr>
-            <th>Currency</th>
-            <td id="country-currency"></td>
-          </tr>
-          <tr>
-            <th>Language</th>
-            <td id="country-language"></td>
-          </tr>
-          <tr>
-            <th>Capital Current Weather</th>
-            <td id="country-weather"></td>
-          </tr>
-          <tr>
-            <th>Wikipedia Link</th>
-            <td id="country-wikipedia"><a href="https://en.wikipedia.org/wiki/Earth" target="_blank" id="myLink">Click Here!</a></td>
-          </tr>
-        </tbody></table>
-        
-       
-      </div>
+     </div>
+   </div>
+ </div>
 
-    </div>
-  </div>
-</div>
+   <!-- Flag Modal -->
+   <div
+   class="modal fade"
+   id="flagModal"
+   tabindex="-1"
+   aria-labelledby="flag news"
+   aria-hidden="true"
+ >
+   <div class="modal-dialog">
+     <div class="modal-content">
+       <div class="modal-header">
+         <h1>Country Flag</h1>
+         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+       </div>
+       <div id="flag-body" class="modal-body"></div>
+     </div>
+   </div>
+ </div>
 
     <!--Jquery-->
     <script src="./jquery/jquery-3.5.1.min.js" type="application/javascript"></script>
