@@ -232,7 +232,7 @@ $('#selCountry').on('change', function() {
                 geonameId: city.geonameId,
               }).addTo(layerGroup).on('click', function(e) {
                 console.log("click click");
-                newMarker.bindPopup("<strong  class='title' >" + city.name + "</strong>" + "<br>(Capital City)" +"<br><a href='https://en.wikipedia.org/wiki/" + result.capital + "' target='_blank' ><img class='wiki-icon' src='img/wiki1.svg' alt='Wiki Link'></a>").openPopup();
+                newMarker.bindPopup("<strong  class='title' >" + city.name + "</strong>" + "<br>(Capital City)" + "<br>Population: "+ city.population.toLocaleString("en-us") + "<br><a href='https://en.wikipedia.org/wiki/" + result.capital + "' target='_blank' ><img class='wiki-icon' src='img/wiki1.svg' alt='Wiki Link'></a>").openPopup();
             });
              
             } else {
@@ -328,7 +328,7 @@ $('#selCountry').on('change', function() {
                       type: 'quake',
                     }).addTo(layerGroup).on('click', function(e) {
                       console.log("click quake");
-                      newerMarker.bindPopup("<strong class='title'>Earthquake</strong><br>Magnitude:" + quake.magnitude + "<br>Happened Here:" +"<br>" + quake.datetime).openPopup();
+                      newerMarker.bindPopup("<strong class='title'>Earthquake</strong><br>Magnitude:<br>" + quake.magnitude + "<br>Happened Here: " +"<br>" + Date.parse(quake.datetime).toString().slice(3, 7) + Date.parse(quake.datetime).toString().slice(10,15)).openPopup(); 
                   });
                   });
                   
@@ -741,11 +741,16 @@ L.easyButton({
                   if (result.data.totalResults === 0) {
                     $("#news-body").append('\n<article class="no-news">\n<h4>Sorry, no news is available for this country currently.</h4>\n</article>\n');
                   }
+
                   else {
                     for (let i = 0; i < 10; i++) {
-                      $("#news-body").append(`\n<div class="card news-card">\n<img class="card-img-top news-img" src=` + result.data.articles[i].urlToImage + `alt="article image">\n<div class="card-body">\n<h5 class="card-title">` + result.data.articles[i].title +`</h5>\n<p class="card-text">`+ result.data.articles[i].description + `</p>\n<a href=` + result.data.articles[i].url + `target="_blank" class="card-link">Read More</a>\n</div>\n</div>\n`);
-                    }
-              } 
+                      if(!result.data.articles[i].urlToImage) {
+                        $("#news-body").append(`<div class="card news-card"><img class="card-img-top news-img" src="img/news.jpg" alt="article image"><div class="card-body"><h5 class="card-title">${result.data.articles[i].title}</h5><p class="card-text">${result.data.articles[i].description}</p><a href=${result.data.articles[i].url} target="_blank" class="card-link">Read More</a></div></div>`);                    
+
+              
+                      } else {
+                      $("#news-body").append(`<div class="card news-card"><img class="card-img-top news-img" src="${result.data.articles[i].urlToImage}" alt="article image"><div class="card-body"><h5 class="card-title">${result.data.articles[i].title}</h5><p class="card-text">${result.data.articles[i].description}</p><a href=${result.data.articles[i].url} target="_blank" class="card-link">Read More</a></div></div>`);                    }
+              } }
               }
   
           },
