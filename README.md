@@ -1,6 +1,6 @@
 # Gazetteer App
 
-Interacitve Map Application with Country Data.
+Interactive Map Application with Country Data.
 
 ## Description
 
