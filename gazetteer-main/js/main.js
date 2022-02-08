@@ -887,7 +887,7 @@ L.easyButton({
       onClick: function() {
         $("#flag-body").empty(),
         $("#flagModal").modal("show")
-       $("#flag-body").append(`<img src="./img/flags/`+ $('#selCountry').val() + `.svg"width="100%"alt="South Africa">`);
+       $("#flag-body").append(`<img src="./img/flags/`+ $('#selCountry').val() + `.svg"width="100%"alt="Country Flag">`);
       },
       icon: "fas fa-flag"
   }] 
