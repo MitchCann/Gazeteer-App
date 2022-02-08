@@ -177,7 +177,8 @@ $('#selCountry').on('change', function() {
               }).addTo(layerGroup).on('click', function(e) {
                 console.log("clicked webcam");
                 newMarker.bindPopup("<strong class='title'>Webcam</strong><hr>"+ webcams.title + "<br><br><iframe width='220' height='245' src='" + webcams.player.day.embed +"'></iframe>").openPopup();
-            });
+                newMarker.unbindPopup();
+              });
              
             
           });
@@ -233,14 +234,15 @@ $('#selCountry').on('change', function() {
               }).addTo(layerGroup).on('click', function(e) {
                 console.log("click click");
                 newMarker.bindPopup("<strong  class='title' >" + city.name + "</strong>" + "<br>(Capital City)" + "<br>Population: "+ city.population.toLocaleString("en-us") + "<br><a href='https://en.wikipedia.org/wiki/" + result.capital + "' target='_blank' ><img class='wiki-icon' src='img/wiki1.svg' alt='Wiki Link'></a>").openPopup();
-            });
+                newMarker.unbindPopup();
+              });
              
             } else {
               var newMarker = L.marker([city.lat, city.lng], {icon: marker, name: city.name, population: city.population, }).addTo(layerGroup).on('click', function(e) {
                 console.log("city clicked");
 
                 newMarker.bindPopup("<strong class ='title'>" + city.name + "</strong>" + "<br>Population: "+ city.population.toLocaleString("en-US") +"<br><a href='https://en.wikipedia.org/wiki/" + city.name + "' target='_blank' style='font-weight=300;'><img class='wiki-icon' src='img/wiki1.svg' alt='Wiki Link'> </a>").openPopup();
-                
+                newMarker.unbindPopup();
               });
               
             }
@@ -283,7 +285,8 @@ $('#selCountry').on('change', function() {
           }).addTo(layerGroup).on('click', function(e) {
             console.log("click POI");
             newMarker.bindPopup("<strong class='title'>Point of Interest" + "</strong><br><strong>" + poi.name + "</strong>" + "<br><a href='https://en.wikipedia.org/wiki/" + poi.name + "' target='_blank'><img class='wiki-icon' src='img/wiki1.svg' alt='Wiki Link'></a>").openPopup();
-        });
+            newMarker.unbindPopup();
+          });
         });
         
       });
@@ -329,7 +332,8 @@ $('#selCountry').on('change', function() {
                     }).addTo(layerGroup).on('click', function(e) {
                       console.log("click quake");
                       newerMarker.bindPopup("<strong class='title'>Earthquake</strong><br>Magnitude:<br>" + quake.magnitude + "<br>Happened Here: " +"<br>" + Date.parse(quake.datetime).toString().slice(3, 7) + Date.parse(quake.datetime).toString().slice(10,15)).openPopup(); 
-                  });
+                      newMarker.unbindPopup();
+                    });
                   });
                   
              }
