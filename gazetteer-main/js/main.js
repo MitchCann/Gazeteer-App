@@ -79,10 +79,7 @@ $.ajax({
                         }));
                     }
                 }
-            //sort options alphabetically
-            // $("#selCountry").html($("#selCountry option").sort(function (a, b) {
-            //     return a.text == b.text ? 0 : a.text < b.text ? -1 : 1;
-            // }));
+           
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
@@ -591,7 +588,7 @@ $('#country-code').html('<td>' + $('#selCountry').val() + '</td>');
                   $("#holiday-body").append('\n<article class="no-news">\n<h4>Sorry, no news is available for this country currently.</h4>\n</article>\n');
                 }
                 else {
-                  for (let i = 0; i < 20; i++) {
+                  for (let i = 0; i < 100; i++) {
                     $("#holiday-body").append(`<tr><td>` + Date.parse(result.data.holidays[i].observed).toString().slice(4,10) + `</td><td>` + result.data.holidays[i].name + `</td></tr>`);
                   }
             } 
