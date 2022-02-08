@@ -3,6 +3,7 @@ html, body, #map {
   width:100%;
   padding:0px;
   margin:0px;
+  
 }
 
 #map {
@@ -183,6 +184,7 @@ h3 {
 
 #holiday-body {
   text-align: center;
+  overflow:auto;
 }
 
 #newsModal .modal-header {

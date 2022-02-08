@@ -20,31 +20,6 @@ let east;
 let west;
 var countryName2;
 
-
-
-var redMarker = L.ExtraMarkers.icon({
-    icon: 'fa-landmark',
-    markerColor: 'violet',
-    shape: 'square',
-    prefix: 'fa'
-  });
-
-var quakeMarker = L.ExtraMarkers.icon({
-    icon: 'fa-forumbee',
-    markerColor: 'blue',
-    shape: 'square',
-    prefix: 'fab'
-});
-
-var camMarker = L.ExtraMarkers.icon({
-    icon: 'fa-camera',
-    markerColor: 'red',
-    shape: 'square',
-    prefix: 'fas'
-})
-
-
-
 // Leaflet Map 
 
 
@@ -54,7 +29,6 @@ var map = L.map('map', {
 }).fitWorld();
 
 
-
 var layerGroup = L.markerClusterGroup().addTo(map);
 
 var Stadia_Outdoors = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png', {
@@ -62,7 +36,28 @@ var Stadia_Outdoors = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles
     attribution: '&copy; <a href="https://basemaps.cartocdn.com/">Base Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+//Icons
 
+var redMarker = L.ExtraMarkers.icon({
+  icon: 'fa-landmark',
+  markerColor: 'violet',
+  shape: 'square',
+  prefix: 'fa'
+});
+
+var quakeMarker = L.ExtraMarkers.icon({
+  icon: 'fa-forumbee',
+  markerColor: 'blue',
+  shape: 'square',
+  prefix: 'fab'
+});
+
+var camMarker = L.ExtraMarkers.icon({
+  icon: 'fa-camera',
+  markerColor: 'red',
+  shape: 'square',
+  prefix: 'fas'
+})
 
 // Market Cluster
     var markers = L.markerClusterGroup();
@@ -127,11 +122,6 @@ const successCallback = (position) => {
       
      
   });
-
-  
-
-  
-
 }
 
 const errorCallback = (error) => {
@@ -267,7 +257,7 @@ $('#selCountry').on('change', function() {
       },
     })
       .done((result) => {
-          console.log('POI Working', result)
+          console.log('POI Working')
         const marker = L.ExtraMarkers.icon({
           icon: 'fa-binoculars',
           markerColor: '#AFD5AA',
@@ -332,7 +322,7 @@ $('#selCountry').on('change', function() {
                     }).addTo(layerGroup).on('click', function(e) {
                       console.log("click quake");
                       newerMarker.bindPopup("<strong class='title'>Earthquake</strong><br>Magnitude:<br>" + quake.magnitude + "<br>Happened Here: " +"<br>" + Date.parse(quake.datetime).toString().slice(3, 7) + Date.parse(quake.datetime).toString().slice(10,15)).openPopup(); 
-                      newMarker.unbindPopup();
+                      newerMarker.unbindPopup();
                     });
                   });
                   
@@ -449,6 +439,251 @@ $.ajax({
     
     
 });
+
+$('#country-code').html('<td>' + $('#selCountry').val() + '</td>');
+        $.ajax({
+          url: "./php/restCountries.php",
+          type: 'POST',
+          dataType: 'json',
+          data: {
+              country: $('#selCountry').val()   
+          },
+          success: function(result) {
+
+            
+            
+              console.log('restCountries', result);
+              if (result.status.name == "ok") {
+                  currencyCode = result.currency.code;
+                  currentCapital= result.capital;
+                  var countryName2 = result.name;
+                  countryName = countryName2.replace(/\s+/g, '_');
+                  console.log(currentCapital);
+                  console.log(countryName2);
+                  
+                  $('#country-capital').html('<td>' + result.capital + '</td>');
+                  $('#country-population').html('<td>' + result.population.toLocaleString("en-US") + '</td>');
+                  $('#country-currency').html('<td>' + result.currency.name + '</td>');
+                  $('#currency-code').html('<td>' + result.currency.code + '</td>');
+                  $('#currency-symbol').html('<td>' + result.currency.symbol + '</td>');
+                  $('#country-language').html('<td>' + result.language.name + '</td>');
+                  $('#calling-codes').html('<td>+' + result.callingCodes + '</td>');
+                  //Wiki link 
+                  document.getElementById("myLink").href = "https://en.wikipedia.org/wiki/" + countryName;
+
+                  if (countryName2 === `United Kingdom of Great Britain and Northern Ireland` ) {
+                      countryName2 = 'UK'
+                  };
+                
+                  const doSearch = () => {
+                    let searchQuery = countryName2 + 'Travel Top Ten';
+                    let url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&key=AIzaSyDbPG_mru-trAvVr0eqngkVYBJVko3HmJY&q=' + searchQuery;
+                      
+                    $.ajax({
+                      url: url,
+                      method: 'GET',
+                      success: (result) => {
+                        $("#video-body").empty()
+                        $('#video-body').text('');
+                        $('#video-body').append(`<iframe id="my-iframe" src=https://www.youtube.com/embed/${result.items[0].id.videoId} allowFullScreen title='youtube player' />`)
+                       
+                      },
+                      error: (err, response) => {
+                        console.log(err.responseText);
+                        $('#video-body').text(err.responseText);
+                      }
+                    })
+                  };
+                
+                  doSearch();
+
+              }
+  
+      //openWeather API          
+      $.ajax({
+          url: "./php/openWeather.php",
+          type: 'POST',
+          dataType: 'json',
+          data: {
+              capital: currentCapital,
+          }, 
+          success: function(result) {
+              console.log('currentCapital', result);
+              capitalCityLat = result.weatherData.coord.lat;
+              capitalCityLon = result.weatherData.coord.lon;
+              
+              
+              if (result.status.name == "ok") {
+  
+                  $('#country-weather').html('<td id=weather>' + result.weatherData.weather[0].description + '</td>');
+                  $('#country-temperature').html('<td id=weather>' + result.weatherData.main.temp + '°C</td>');
+                  $('#feels-like').html('<td id=weather>' + result.weatherData.main.feels_like + '°C</td>');
+                
+                  $("#today-weather-type").html(result.weatherData.weather[0].description + '<hr> <p>Current Temp: ' + result.weatherData.main.temp + '°C </p> <p>Feels Like: ' +result.weatherData.main.feels_like + '°C </p>')
+              }
+          },
+  
+          error: function(jqXHR, textStatus, errorThrown) {
+              console.log(jqXHR.responseText);
+              console.log(errorThrown);
+          } 
+      })
+          },
+          
+          
+          
+      });
+
+      $.ajax({
+        url: "./php/covid.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            country: $('#selCountry').val(),
+        },
+        success: function(result) {
+          $('#modal-body').html('<div class="preloader"> <img class="preloader-icon" src="img/Ripple-loader.gif" alt="My Site Preloader"/> </div>')
+            console.log('covid data', result);
+            if (result.status.name == "ok") {
+                $('#total-cases').html('<td>' + result.data[0].toLocaleString("en-US") + '</td>');
+                $('#total-deaths').html('<td>' + result.data[1].toLocaleString("en-US") + '</td>');
+
+                if (result.data[2] === 0) {
+                  $('#total-recovered').html('<td><p>Data Not Yet Published</p></td>');
+                } else {
+                $('#total-recovered').html('<td>' + result.data[2].toLocaleString("en-US") + '</td>');
+                }
+                $('#new-confirmed').html('<td>' + result.data[3].toLocaleString("en-US") + '</td>');
+                $('#new-deaths').html('<td>' + result.data[4].toLocaleString("en-US") + '</td>');
+                if (result.data[5] === 0) {
+                $('#new-recovered').html('<td><p>Data Not Yet Published</p></td>');
+                } else {
+                  $('#new-recovered').html('<td>' + result.data[5].toLocaleString("en-US") + '</td>');
+                }
+                $(".preloader").hide(); 
+          
+            }
+
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          // your error code
+          console.log(textStatus, errorThrown);
+          console.log(jqXHR.responseText);
+        }
+        
+        
+    });
+
+    $("#holiday-body").empty(),
+        $.ajax({
+          url: "./php/holidays.php",
+          type: 'POST',
+          dataType: 'json',
+          data: {
+              country: $('#selCountry').val()  
+          },
+          success: function(result) {
+            
+              console.log('holiday data', result);
+              if (result.status.name == "ok") {
+
+                if (result.data.totalResults === 0) {
+                  $("#holiday-body").append('\n<article class="no-news">\n<h4>Sorry, no news is available for this country currently.</h4>\n</article>\n');
+                }
+                else {
+                  for (let i = 0; i < 20; i++) {
+                    $("#holiday-body").append(`<tr><td>` + Date.parse(result.data.holidays[i].observed).toString().slice(4,10) + `</td><td>` + result.data.holidays[i].name + `</td></tr>`);
+                  }
+            } 
+                 
+              }
+  
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            // your error code
+            console.log(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+          }
+          
+          
+      });
+
+      $("#news-body").empty(),
+      
+        $.ajax({
+          url: "./php/news.php",
+          type: 'POST',
+          dataType: 'json',
+          data: {
+              country: $('#selCountry').val()  
+          },
+          success: function(result) {
+            
+              console.log('news data', result);
+              if (result.status.name == "ok") {
+                  if (result.data.totalResults === 0) {
+                    $("#news-body").append('\n<article class="no-news">\n<h4>Sorry, no news is available for this country currently.</h4>\n</article>\n');
+                  }
+
+                  else {
+                    for (let i = 0; i < 10; i++) {
+                      if(!result.data.articles[i].urlToImage) {
+                        $("#news-body").append(`<div class="card news-card"><img class="card-img-top news-img" src="img/news.jpg" alt="article image"><div class="card-body"><h5 class="card-title">${result.data.articles[i].title}</h5><p class="card-text">${result.data.articles[i].description}</p><a href=${result.data.articles[i].url} target="_blank" class="card-link">Read More</a></div></div>`);                    
+
+              
+                      } else {
+                      $("#news-body").append(`<div class="card news-card"><img class="card-img-top news-img" src="${result.data.articles[i].urlToImage}" alt="article image"><div class="card-body"><h5 class="card-title">${result.data.articles[i].title}</h5><p class="card-text">${result.data.articles[i].description}</p><a href=${result.data.articles[i].url} target="_blank" class="card-link">Read More</a></div></div>`);                    }
+              } }
+              }
+  
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            // your error code
+            console.log(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+          }
+          
+          
+      });
+
+      $.ajax({
+        url: "./php/weather.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            lat: capitalCityLat,
+            lng: capitalCityLon,
+        },
+        success: function(result) {            
+            console.log('weather data', result);
+            if (result.status.name == "ok") {
+              
+              $("#today-weather-icon").attr("src", `http://openweathermap.org/img/w/`+ result.weatherForcast.daily[1].weather[0].icon +`.png`),
+              $("#plus-one-date").html('Tomorrow'),
+              $("#plus-one-weather-icon").attr("src", `http://openweathermap.org/img/w/`+ result.weatherForcast.daily[2].weather[0].icon +`.png`),
+              $("#plus-one-max-temp").html('Max Temp:<br>' + result.weatherForcast.daily[1].temp.max + '°C'),
+              $("#plus-one-min-temp").html('Min Temp:<br>' +result.weatherForcast.daily[1].temp.min + '°C'),
+              $("#plus-two-date").html('Third Day'),
+              $("#plus-two-weather-icon").attr("src", `http://openweathermap.org/img/w/`+ result.weatherForcast.daily[3].weather[0].icon+`.png`),
+              $("#plus-two-max-temp").html('Max Temp:<br>' + result.weatherForcast.daily[2].temp.max + '°C'),
+              $("#plus-two-min-temp").html('Min Temp:<br>' +result.weatherForcast.daily[2].temp.min + '°C'),
+              $("#plus-three-date").html('Fourth Day'),
+              $("#plus-three-weather-icon").attr("src", `http://openweathermap.org/img/w/`+ result.weatherForcast.daily[4].weather[0].icon +`.png`),
+              $("#plus-three-max-temp").html('Max Temp:<br>' + result.weatherForcast.daily[3].temp.max + '°C'),
+              $("#plus-three-min-temp").html('Min Temp:<br>' +result.weatherForcast.daily[3].temp.min + '°C'),
+              $("#plus-four-date").html('Fifth Day'),
+              $("#plus-four-weather-icon").attr("src", `http://openweathermap.org/img/w/`+ result.weatherForcast.daily[5].weather[0].icon +`.png`),
+              $("#plus-four-max-temp").html('Max Temp:<br>' + result.weatherForcast.daily[4].temp.max + '°C'),
+              $("#plus-four-min-temp").html('Min Temp:<br>' +result.weatherForcast.daily[4].temp.min + '°C') 
+           
+        }
+
+        },
+         
+    });
+
+    
+
   
 //Preloader
 $(".preloader").hide();
@@ -522,98 +757,7 @@ L.easyButton({
       stateName: "get-country-info",
       onClick: function() {
         $("#exampleModal").modal("show")
-        $('#country-code').html('<td>' + $('#selCountry').val() + '</td>');
-        $.ajax({
-          url: "./php/restCountries.php",
-          type: 'POST',
-          dataType: 'json',
-          data: {
-              country: $('#selCountry').val()   
-          },
-          success: function(result) {
-
-            
-            
-              console.log('restCountries', result);
-              if (result.status.name == "ok") {
-                  currencyCode = result.currency.code;
-                  currentCapital= result.capital;
-                  var countryName2 = result.name;
-                  countryName = countryName2.replace(/\s+/g, '_');
-                  console.log(currentCapital);
-                  console.log(countryName2);
-                  
-                  $('#country-capital').html('<td>' + result.capital + '</td>');
-                  $('#country-population').html('<td>' + result.population.toLocaleString("en-US") + '</td>');
-                  $('#country-currency').html('<td>' + result.currency.name + '</td>');
-                  $('#currency-code').html('<td>' + result.currency.code + '</td>');
-                  $('#currency-symbol').html('<td>' + result.currency.symbol + '</td>');
-                  $('#country-language').html('<td>' + result.language.name + '</td>');
-                  $('#calling-codes').html('<td>+' + result.callingCodes + '</td>');
-                  //Wiki link 
-                  document.getElementById("myLink").href = "https://en.wikipedia.org/wiki/" + countryName;
-
-                  if (countryName2 === `United Kingdom of Great Britain and Northern Ireland` ) {
-                      countryName2 = 'UK'
-                  };
-                
-                  const doSearch = () => {
-                    let searchQuery = countryName2 + 'Travel Top Ten';
-                    let url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&key=AIzaSyDbPG_mru-trAvVr0eqngkVYBJVko3HmJY&q=' + searchQuery;
-                      
-                    $.ajax({
-                      url: url,
-                      method: 'GET',
-                      success: (result) => {
-                        $('#video-body').text('');
-                        $('#video-body').append(`<iframe id="my-iframe" src=https://www.youtube.com/embed/${result.items[0].id.videoId} allowFullScreen title='youtube player' />`)
-                       
-                      },
-                      error: (err, response) => {
-                        console.log(err.responseText);
-                        $('#video-body').text(err.responseText);
-                      }
-                    })
-                  };
-                
-                  doSearch();
-
-              }
-  
-      //openWeather API          
-      $.ajax({
-          url: "./php/openWeather.php",
-          type: 'POST',
-          dataType: 'json',
-          data: {
-              capital: currentCapital,
-          }, 
-          success: function(result) {
-              console.log('currentCapital', result);
-              capitalCityLat = result.weatherData.coord.lat;
-              capitalCityLon = result.weatherData.coord.lon;
-              
-              
-              if (result.status.name == "ok") {
-  
-                  $('#country-weather').html('<td id=weather>' + result.weatherData.weather[0].description + '</td>');
-                  $('#country-temperature').html('<td id=weather>' + result.weatherData.main.temp + '°C</td>');
-                  $('#feels-like').html('<td id=weather>' + result.weatherData.main.feels_like + '°C</td>');
-                
-                  $("#today-weather-type").html(result.weatherData.weather[0].description + '<hr> <p>Current Temp: ' + result.weatherData.main.temp + '°C </p> <p>Feels Like: ' +result.weatherData.main.feels_like + '°C </p>')
-              }
-          },
-  
-          error: function(jqXHR, textStatus, errorThrown) {
-              console.log(jqXHR.responseText);
-              console.log(errorThrown);
-          } 
-      })
-          },
-          
-          
-          
-      });
+        
       },
       icon: "fa-info"
   }]
@@ -626,46 +770,7 @@ L.easyButton({
   states: [{
       stateName: "get-covid-info",
       onClick: function() {
-        $("#covidModal").modal("show")
-        $.ajax({
-          url: "./php/covid.php",
-          type: 'POST',
-          dataType: 'json',
-          data: {
-              country: $('#selCountry').val(),
-          },
-          success: function(result) {
-            $('#modal-body').html('<div class="preloader"> <img class="preloader-icon" src="img/Ripple-loader.gif" alt="My Site Preloader"/> </div>')
-              console.log('covid data', result);
-              if (result.status.name == "ok") {
-                  $('#total-cases').html('<td>' + result.data[0].toLocaleString("en-US") + '</td>');
-                  $('#total-deaths').html('<td>' + result.data[1].toLocaleString("en-US") + '</td>');
-
-                  if (result.data[2] === 0) {
-                    $('#total-recovered').html('<td><p>Data Not Published</p></td>');
-                  } else {
-                  $('#total-recovered').html('<td>' + result.data[2].toLocaleString("en-US") + '</td>');
-                  }
-                  $('#new-confirmed').html('<td>' + result.data[3].toLocaleString("en-US") + '</td>');
-                  $('#new-deaths').html('<td>' + result.data[4].toLocaleString("en-US") + '</td>');
-                  if (result.data[5] === 0) {
-                  $('#new-recovered').html('<td><p>Data Not Published</p></td>');
-                  } else {
-                    $('#new-recovered').html('<td>' + result.data[5].toLocaleString("en-US") + '</td>');
-                  }
-                  $(".preloader").hide(); 
-            
-              }
-  
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-            // your error code
-            console.log(textStatus, errorThrown);
-            console.log(jqXHR.responseText);
-          }
-          
-          
-      });
+        $("#covidModal").modal("show")     
       },
       icon: "fa-virus"
   }]
@@ -679,42 +784,7 @@ L.easyButton({
   states: [{
       stateName: "get-holiday-info",
       onClick: function() {
-        $("#holiday-body").empty(),
-          
-        
         $("#holidayModal").modal("show")
-        $.ajax({
-          url: "./php/holidays.php",
-          type: 'POST',
-          dataType: 'json',
-          data: {
-              country: $('#selCountry').val()  
-          },
-          success: function(result) {
-            
-              console.log('holiday data', result);
-              if (result.status.name == "ok") {
-
-                if (result.data.totalResults === 0) {
-                  $("#holiday-body").append('\n<article class="no-news">\n<h4>Sorry, no news is available for this country currently.</h4>\n</article>\n');
-                }
-                else {
-                  for (let i = 0; i < 20; i++) {
-                    $("#holiday-body").append(`<tr><td>` + Date.parse(result.data.holidays[i].observed).toString().slice(4,10) + `</td><td>` + result.data.holidays[i].name + `</td></tr>`);
-                  }
-            } 
-                 
-              }
-  
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-            // your error code
-            console.log(textStatus, errorThrown);
-            console.log(jqXHR.responseText);
-          }
-          
-          
-      });
       },
       icon: "fa-gift"
   }]
@@ -729,43 +799,7 @@ L.easyButton({
   states: [{
       stateName: "get-news-info",
       onClick: function() {
-        $("#news-body").empty(),
         $("#newsModal").modal("show")
-        $.ajax({
-          url: "./php/news.php",
-          type: 'POST',
-          dataType: 'json',
-          data: {
-              country: $('#selCountry').val()  
-          },
-          success: function(result) {
-            
-              console.log('news data', result);
-              if (result.status.name == "ok") {
-                  if (result.data.totalResults === 0) {
-                    $("#news-body").append('\n<article class="no-news">\n<h4>Sorry, no news is available for this country currently.</h4>\n</article>\n');
-                  }
-
-                  else {
-                    for (let i = 0; i < 10; i++) {
-                      if(!result.data.articles[i].urlToImage) {
-                        $("#news-body").append(`<div class="card news-card"><img class="card-img-top news-img" src="img/news.jpg" alt="article image"><div class="card-body"><h5 class="card-title">${result.data.articles[i].title}</h5><p class="card-text">${result.data.articles[i].description}</p><a href=${result.data.articles[i].url} target="_blank" class="card-link">Read More</a></div></div>`);                    
-
-              
-                      } else {
-                      $("#news-body").append(`<div class="card news-card"><img class="card-img-top news-img" src="${result.data.articles[i].urlToImage}" alt="article image"><div class="card-body"><h5 class="card-title">${result.data.articles[i].title}</h5><p class="card-text">${result.data.articles[i].description}</p><a href=${result.data.articles[i].url} target="_blank" class="card-link">Read More</a></div></div>`);                    }
-              } }
-              }
-  
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-            // your error code
-            console.log(textStatus, errorThrown);
-            console.log(jqXHR.responseText);
-          }
-          
-          
-      });
       },
       icon: "fa-newspaper"
   }]
@@ -845,9 +879,7 @@ L.easyButton({
   }]
 }).addTo(map) 
 
-$('#videoModal').on('hidden.bs.modal', function () {
-  $("#video-body").empty()
-})
+
 
 //Flag Modal
 L.easyButton({
