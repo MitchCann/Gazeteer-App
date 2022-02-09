@@ -468,11 +468,12 @@ $('#country-code').html('<td>' + $('#selCountry').val() + '</td>');
                   //Wiki link 
                   document.getElementById("myLink").href = "https://en.wikipedia.org/wiki/" + countryName;
 
+
                   if (countryName2 === `United Kingdom of Great Britain and Northern Ireland` ) {
                       countryName2 = 'UK'
                   };
                 
-                  const doSearch = () => {
+                  /*const doSearch = () => {
                     let searchQuery = countryName2 + 'Travel Top Ten';
                     let url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&key=AIzaSyDbPG_mru-trAvVr0eqngkVYBJVko3HmJY&q=' + searchQuery;
                       
@@ -487,14 +488,15 @@ $('#country-code').html('<td>' + $('#selCountry').val() + '</td>');
                       },
                       error: (err, response) => {
                         console.log(err.responseText);
-                        $('#video-body').text(err.responseText);
+                        $('#video-body').append(`<p>Sorry, we have reached the API limit for today.</p>`);
+
                       }
                     })
                   };
                 
-                  doSearch();
+                  doSearch(); */
 
-              }
+              } 
   
       //openWeather API          
       $.ajax({
@@ -887,7 +889,8 @@ L.easyButton({
       onClick: function() {
         $("#flag-body").empty(),
         $("#flagModal").modal("show")
-       $("#flag-body").append(`<img src="./img/flags/`+ $('#selCountry').val() + `.svg"width="100%"alt="Country Flag">`);
+        $("#flag-body").append(`<img src="./img/flags/`+ $('#selCountry').val().toLowerCase() + `.svg"width="100%"alt="Country Flag">`);
+
       },
       icon: "fas fa-flag"
   }] 

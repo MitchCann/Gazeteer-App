@@ -76,17 +76,21 @@ h3 {
   color: #1b75bb;
 }
 
+
 #covid-button {
   color: #94d56a;
 }
+
 
 #holiday-button {
   color: #a23337;
 }
 
+
 #news-button {
   color: #90278e;
 }
+
 
 #weather-button {
   color: #f0cb3e;
@@ -113,29 +117,6 @@ h3 {
   color: #fff;
 }
 
-.covid-icon {
-  text-align:center
-}
-
-.covid-icon .svg-inline--fa {
-  width:3rem;
-  height:3rem;
-  margin-top:1.5rem;
-  color:#94d56a;
-}
-
-/* Info Modal */
-
-.info-icon {
-  text-align:center
-}
-
-.info-icon .svg-inline--fa {
-  width:3rem;
-  height:3rem;
-  margin-top:1.5rem;
-  color:#1b75bb;
-}
 
 /* Flag Modal */
 
@@ -171,21 +152,20 @@ h3 {
   color: #fff;
 }
 
-.holiday-icon {
-  text-align:center
-}
 
 .holiday-icon .svg-inline--fa {
-  width:3rem;
-  height:3rem;
-  margin-top:1.5rem;
+  text-align:center;
   color: #a23337;
 }
 
 #holiday-body {
   text-align: center;
-  overflow-y:auto;
-  height: 80vh;
+  padding:0;
+  max-height:75vh;
+  overflow:auto;
+  display:inline-block
+
+
 }
 
 .modal-dialog {
@@ -199,16 +179,6 @@ h3 {
   color: #fff;
 }
 
-.news-icon {
-  text-align:center
-}
-
-.news-icon .svg-inline--fa {
-  width:3rem;
-  height:3rem;
-  margin-top:1.5rem;
-  color: #90278e;
-}
 
 #news-body {
   padding:0;
@@ -403,14 +373,6 @@ h5.card-title {
  .modal-content {
   border: 0px solid rgba(0,0,0,.2) !important;
  }
-
-.btn-secondary {
-  color: rgb(0, 0, 0);
-  background-color: white !important;
-  border-color: white !important;
-  padding: 0% !important;
-
-}
 
 #bootstrap-overide {
   text-transform: capitalize;
