@@ -489,7 +489,6 @@ $('#country-code').html('<td>' + $('#selCountry').val() + '</td>');
                       error: (err, response) => {
                         console.log(err.responseText);
                         $('#video-body').append(`<p>Sorry, we have reached the API limit for today.</p>`);
-
                       }
                     })
                   };
@@ -895,4 +894,3 @@ L.easyButton({
       icon: "fas fa-flag"
   }] 
 }).addTo(map) 
-
